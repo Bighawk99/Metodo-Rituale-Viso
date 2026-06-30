@@ -84,6 +84,18 @@ app.use(cors({
   methods: ['GET', 'POST'],
 }));
 
+/* ─── Health check (debug) ─── */
+app.get('/api/health', function (req, res) {
+  res.json({
+    ok:      true,
+    stripe:  !!process.env.STRIPE_SECRET_KEY,
+    pk:      !!process.env.STRIPE_PUBLISHABLE_KEY,
+    baseUrl: process.env.BASE_URL || null,
+    supabase:!!process.env.SUPABASE_URL,
+    pixel:   !!process.env.META_PIXEL_ID,
+  });
+});
+
 /* ─── Rate limiting ─── */
 const checkoutLimiter = rateLimit({
   windowMs:        15 * 60 * 1000,
