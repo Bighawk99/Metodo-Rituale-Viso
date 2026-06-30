@@ -215,6 +215,34 @@ app.post('/api/create-payment-intent', checkoutLimiter, async function (req, res
   }
 });
 
+/* ─── GET /api/download-pdf ──────────────────────────────────────────────────
+   Serve il PDF solo dopo aver verificato che il PaymentIntent sia succeeded.   */
+app.get('/api/download-pdf', async function (req, res) {
+  const { payment_intent } = req.query;
+
+  if (!payment_intent || !payment_intent.startsWith('pi_')) {
+    return res.status(400).send('Parametro mancante.');
+  }
+
+  try {
+    const pi = await getStripe().paymentIntents.retrieve(payment_intent);
+    if (pi.status !== 'succeeded') {
+      return res.status(403).send('Pagamento non verificato.');
+    }
+
+    const pdfPath = path.join(__dirname, 'guida.pdf');
+    if (!fs.existsSync(pdfPath)) {
+      const alt = path.join(process.cwd(), 'guida.pdf');
+      if (!fs.existsSync(alt)) return res.status(404).send('File non trovato.');
+      return res.download(alt, 'Metodo-Rituale-Viso.pdf');
+    }
+    res.download(pdfPath, 'Metodo-Rituale-Viso.pdf');
+  } catch (err) {
+    console.error('[Download PDF]', err.message);
+    res.status(500).send('Errore. Riprova.');
+  }
+});
+
 /* ─── GET /api/purchase-confirm ─────────────────────────────────────────────
    Chiamato da success.html dopo il redirect di Stripe.
    Verifica il PaymentIntent e invia Purchase a Meta CAPI.                     */
