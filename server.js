@@ -70,7 +70,17 @@ app.use(helmet({
 
 /* ─── CORS ─── */
 app.use(cors({
-  origin:  process.env.ALLOWED_ORIGIN || 'http://localhost:3000',
+  origin: function (origin, cb) {
+    /* Permetti: nessuna origin (curl/server), localhost, tutti i *.vercel.app, dominio custom */
+    if (!origin) return cb(null, true);
+    const allowed = process.env.ALLOWED_ORIGIN || '';
+    if (
+      origin === allowed ||
+      origin === 'http://localhost:3000' ||
+      /\.vercel\.app$/.test(origin)
+    ) return cb(null, true);
+    cb(new Error('CORS: origin non permessa: ' + origin));
+  },
   methods: ['GET', 'POST'],
 }));
 
