@@ -1,0 +1,16 @@
+# Variabili d'ambiente — MAI committare
+.env
+
+# Dipendenze Node
+node_modules/
+
+# Log
+*.log
+npm-debug.log*
+
+# macOS
+.DS_Store
+
+# Editor
+.vscode/
+.idea/

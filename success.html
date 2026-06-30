@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pagamento confermato — Metodo Rituale Viso</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- Meta Pixel -->
+  <script>
+  !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+  n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+  document,'script','https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '%%META_PIXEL_ID%%');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=%%META_PIXEL_ID%%&ev=PageView&noscript=1"/></noscript>
+  <!-- End Meta Pixel -->
+
+  <style>
+    :root {
+      --bg: #F6F1EA; --bg-warm: #E8DDCF; --bg-deep: #DDD0BE;
+      --ink: #2C2622; --ink-soft: #6B5C54; --ink-muted: #A0948D;
+      --accent: #C98B6B; --radius: 20px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; }
+    body { background: var(--bg); color: var(--ink); font-family: 'Inter', sans-serif; line-height: 1.75; -webkit-font-smoothing: antialiased; min-height: 100vh; display: flex; flex-direction: column; }
+
+    header { border-bottom: 1px solid var(--bg-deep); padding: 18px 24px; text-align: center; }
+    header p { font-family: 'Fraunces', serif; font-style: italic; font-size: 1.1rem; font-weight: 600; color: var(--ink); }
+    header span { color: var(--accent); }
+
+    main { flex: 1; display: flex; align-items: center; justify-content: center; padding: 48px 24px; }
+
+    .card {
+      max-width: 540px;
+      width: 100%;
+      background: var(--bg-warm);
+      border-radius: var(--radius);
+      padding: 56px 48px;
+      text-align: center;
+    }
+    @media (max-width: 560px) { .card { padding: 40px 24px; } }
+
+    .check-circle {
+      width: 72px; height: 72px;
+      border-radius: 50%;
+      background: #d6ece2;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 28px;
+    }
+
+    h1 {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(1.8rem, 5vw, 2.4rem);
+      font-weight: 600;
+      line-height: 1.15;
+      margin-bottom: 12px;
+    }
+
+    .subtitle {
+      font-size: 16px;
+      color: var(--ink-soft);
+      margin-bottom: 36px;
+      line-height: 1.65;
+    }
+
+    .step-list {
+      text-align: left;
+      background: var(--bg);
+      border-radius: 14px;
+      padding: 24px;
+      margin-bottom: 32px;
+    }
+    .step-list p { font-size: 14px; color: var(--ink-soft); margin: 0; line-height: 1.6; }
+    .step-list .step { display: flex; gap: 12px; align-items: flex-start; padding: 10px 0; border-bottom: 1px solid var(--bg-deep); }
+    .step:last-child { border-bottom: none; padding-bottom: 0; }
+    .step-num { flex-shrink: 0; width: 24px; height: 24px; border-radius: 50%; background: var(--accent); color: #fff; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; margin-top: 2px; }
+
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      background: var(--ink); color: var(--bg);
+      font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 700;
+      padding: 14px 32px; border-radius: var(--radius); text-decoration: none;
+      transition: background 0.15s;
+    }
+    .btn:hover { background: #3d3330; }
+
+    footer { border-top: 1px solid var(--bg-deep); padding: 20px 24px; text-align: center; font-size: 13px; color: var(--ink-muted); }
+    footer a { color: var(--accent); text-decoration: none; }
+  </style>
+</head>
+<body>
+
+<header>
+  <p>Metodo <span>·</span> Rituale <span>·</span> Viso</p>
+</header>
+
+<main>
+  <div class="card">
+
+    <div class="check-circle" aria-hidden="true">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#2a7a55" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="20 6 9 17 4 12"/>
+      </svg>
+    </div>
+
+    <h1>Pagamento confermato.</h1>
+    <p class="subtitle">
+      Benvenuta nel Metodo Rituale Viso.<br/>
+      Riceverai a breve una e-mail con le istruzioni di accesso alla tua area riservata.
+    </p>
+
+    <div class="step-list">
+      <div class="step">
+        <span class="step-num">1</span>
+        <p><strong style="color:var(--ink);">Controlla la tua e-mail</strong> — troverai il link di accesso alla piattaforma entro pochi minuti (controlla anche spam).</p>
+      </div>
+      <div class="step">
+        <span class="step-num">2</span>
+        <p><strong style="color:var(--ink);">Accedi all'area riservata</strong> — trovi tutti i 20 video guidati e il calendario delle 4 settimane già pronto.</p>
+      </div>
+      <div class="step">
+        <span class="step-num">3</span>
+        <p><strong style="color:var(--ink);">Attiva il monitoraggio progressi</strong> — registra ogni sessione sulla piattaforma per la tua garanzia rimborso.</p>
+      </div>
+      <div class="step">
+        <span class="step-num">4</span>
+        <p><strong style="color:var(--ink);">Fai la prima sessione stanotte</strong> — e guarda cosa succede domani mattina allo specchio.</p>
+      </div>
+    </div>
+
+    <a href="index.html" class="btn">← Torna alla home</a>
+
+  </div>
+</main>
+
+<footer>
+  <p>© 2026 Metodo Rituale Viso &nbsp;·&nbsp; <a href="privacy.html">Privacy</a> &nbsp;·&nbsp; <a href="termini.html">Termini</a></p>
+</footer>
+
+<script>
+/* Purchase tracking: verifica PaymentIntent e invia Purchase al Pixel */
+(function () {
+  var params          = new URLSearchParams(window.location.search);
+  var paymentIntent   = params.get('payment_intent');
+  var redirectStatus  = params.get('redirect_status');
+
+  if (!paymentIntent || redirectStatus !== 'succeeded') return;
+
+  var qs = 'payment_intent=' + encodeURIComponent(paymentIntent)
+         + '&redirect_status=' + encodeURIComponent(redirectStatus);
+
+  fetch('/api/purchase-confirm?' + qs)
+    .then(function (r) { return r.json(); })
+    .then(function (data) {
+      if (!data.eventId) return;
+      if (typeof fbq !== 'undefined') {
+        fbq('track', 'Purchase', {
+          value:        data.value,
+          currency:     data.currency,
+          content_ids:  ['metodo-rituale-viso'],
+          content_type: 'product',
+          content_name: 'Metodo Rituale Viso',
+          num_items:    1,
+          order_id:     data.eventId,
+        }, { eventID: data.eventId });
+      }
+    })
+    .catch(function (e) { console.error('[Purchase Pixel]', e); });
+})();
+</script>
+
+</body>
+</html>
