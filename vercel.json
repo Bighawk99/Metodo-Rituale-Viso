@@ -10,15 +10,22 @@
           "success.html",
           "privacy.html",
           "termini.html",
-          "*.png"
+          "hero.png",
+          "laila.png",
+          "product-thumb.png",
+          "prima.png",
+          "prima-2.png",
+          "prima-3.png",
+          "prima-4.png",
+          "dopo.png",
+          "dopo-2.png",
+          "dopo-3.png",
+          "dopo-4.png"
         ]
       }
     }
   ],
   "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "server.js"
-    }
+    { "src": "/(.*)", "dest": "server.js" }
   ]
 }

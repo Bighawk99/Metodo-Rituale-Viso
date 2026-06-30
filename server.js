@@ -375,21 +375,26 @@ app.post('/api/webhook', async function (req, res) {
 /* ─── 404 ─── */
 app.use((req, res) => res.status(404).type('html').send(templates.index));
 
-/* ─── Avvio ─── */
-const PORT = parseInt(process.env.PORT, 10) || 3000;
-app.listen(PORT, function () {
-  console.log('');
-  console.log('  Metodo Rituale Viso — Server');
-  console.log('  ─────────────────────────────────────────');
-  console.log('  URL locale:  http://localhost:' + PORT);
-  console.log('  Stripe:      ' + (isLive ? '🔴 MODALITÀ LIVE' : '🟡 MODALITÀ TEST'));
-  console.log('  Meta Pixel:  ' + (process.env.META_PIXEL_ID   ? '✓ ' + process.env.META_PIXEL_ID  : '— non configurato'));
-  console.log('  Meta CAPI:   ' + (process.env.META_CAPI_TOKEN ? '✓ token presente'                : '— non configurato'));
-  console.log('  Supabase:    ' + (supabase                          ? '✓ connesso'        : '— non configurato'));
-  console.log('  Webhook:     ' + (process.env.STRIPE_WEBHOOK_SECRET ? '✓ firma attiva'   : '⚠️  firma non verificata'));
-  console.log('');
-  if (isLive) {
-    console.log('  ⚠️  ATTENZIONE: Stripe LIVE — i pagamenti sono reali.');
+/* ─── Avvio locale (non eseguito su Vercel) ─── */
+if (!process.env.VERCEL) {
+  const PORT = parseInt(process.env.PORT, 10) || 3000;
+  app.listen(PORT, function () {
     console.log('');
-  }
-});
+    console.log('  Metodo Rituale Viso — Server');
+    console.log('  ─────────────────────────────────────────');
+    console.log('  URL locale:  http://localhost:' + PORT);
+    console.log('  Stripe:      ' + (isLive ? '🔴 MODALITÀ LIVE' : '🟡 MODALITÀ TEST'));
+    console.log('  Meta Pixel:  ' + (process.env.META_PIXEL_ID   ? '✓ ' + process.env.META_PIXEL_ID  : '— non configurato'));
+    console.log('  Meta CAPI:   ' + (process.env.META_CAPI_TOKEN ? '✓ token presente'                : '— non configurato'));
+    console.log('  Supabase:    ' + (supabase                          ? '✓ connesso'        : '— non configurato'));
+    console.log('  Webhook:     ' + (process.env.STRIPE_WEBHOOK_SECRET ? '✓ firma attiva'   : '⚠️  firma non verificata'));
+    console.log('');
+    if (isLive) {
+      console.log('  ⚠️  ATTENZIONE: Stripe LIVE — i pagamenti sono reali.');
+      console.log('');
+    }
+  });
+}
+
+/* ─── Export per Vercel serverless ─── */
+module.exports = app;
