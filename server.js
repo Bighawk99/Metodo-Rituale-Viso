@@ -181,7 +181,7 @@ app.post('/api/create-payment-intent', checkoutLimiter, async function (req, res
 
   try {
     const paymentIntent = await getStripe().paymentIntents.create({
-      amount:   3900,
+      amount:   100,
       currency: 'eur',
       automatic_payment_methods: { enabled: true },
       description: 'Metodo Rituale Viso — Percorso completo',
