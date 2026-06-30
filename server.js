@@ -2,46 +2,51 @@
 
 require('dotenv').config();
 
-const express        = require('express');
-const helmet         = require('helmet');
-const cors           = require('cors');
-const rateLimit      = require('express-rate-limit');
-const stripe         = require('stripe')(process.env.STRIPE_SECRET_KEY);
-const crypto         = require('crypto');
-const fs             = require('fs');
-const path           = require('path');
+const express          = require('express');
+const helmet           = require('helmet');
+const cors             = require('cors');
+const rateLimit        = require('express-rate-limit');
+const Stripe           = require('stripe');
+const crypto           = require('crypto');
+const fs               = require('fs');
+const path             = require('path');
 const { createClient } = require('@supabase/supabase-js');
 
-/* ─── Supabase client (opzionale — non blocca il server se mancante) ─── */
+/* ─── Stripe (lazy — non crasha se la chiave manca al boot) ─── */
+let _stripe = null;
+function getStripe() {
+  if (!_stripe) {
+    const key = process.env.STRIPE_SECRET_KEY;
+    if (!key) throw new Error('STRIPE_SECRET_KEY non impostata nelle variabili d\'ambiente Vercel');
+    _stripe = Stripe(key);
+  }
+  return _stripe;
+}
+
+/* ─── Supabase (opzionale) ─── */
 const supabase = (process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_KEY)
   ? createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_KEY)
   : null;
 
-/* ─── Validazione variabili obbligatorie ─── */
-['STRIPE_SECRET_KEY', 'STRIPE_PUBLISHABLE_KEY', 'BASE_URL'].forEach(function (key) {
-  if (!process.env[key]) {
-    console.error('[ERRORE] Variabile mancante: ' + key + ' — controlla il .env');
-    process.exit(1);
+/* ─── Template HTML: caricamento lazy con cache ─── */
+const _templates = {};
+function getTemplate(filename) {
+  if (!_templates[filename]) {
+    /* Cerca prima in __dirname, poi in process.cwd() (compatibilità Vercel) */
+    const candidates = [
+      path.join(__dirname, filename),
+      path.join(process.cwd(), filename),
+    ];
+    let raw = null;
+    for (const p of candidates) {
+      try { raw = fs.readFileSync(p, 'utf8'); break; } catch (_) {}
+    }
+    if (!raw) throw new Error('File HTML non trovato: ' + filename);
+    _templates[filename] = raw
+      .replace(/%%META_PIXEL_ID%%/g,  process.env.META_PIXEL_ID          || '')
+      .replace(/%%STRIPE_PK%%/g,      process.env.STRIPE_PUBLISHABLE_KEY || '');
   }
-});
-
-const isLive = process.env.STRIPE_SECRET_KEY.startsWith('sk_live');
-
-/* ─── Template HTML: inietta variabili pubbliche a runtime ─── */
-function loadTemplate(filename) {
-  const raw = fs.readFileSync(path.join(__dirname, filename), 'utf8');
-  return raw
-    .replace(/%%META_PIXEL_ID%%/g,   process.env.META_PIXEL_ID           || '')
-    .replace(/%%STRIPE_PK%%/g,       process.env.STRIPE_PUBLISHABLE_KEY  || '');
-}
-
-let templates = {};
-try {
-  templates.index   = loadTemplate('index.html');
-  templates.success = loadTemplate('success.html');
-} catch (e) {
-  console.error('[ERRORE] Impossibile leggere i file HTML:', e.message);
-  process.exit(1);
+  return _templates[filename];
 }
 
 /* ─── App ─── */
@@ -83,9 +88,19 @@ app.use('/api/webhook', express.raw({ type: 'application/json' }));
 app.use(express.json({ limit: '10kb' }));
 
 /* ─── Route: HTML con variabili iniettate ─── */
-app.get('/',             (req, res) => res.type('html').send(templates.index));
-app.get('/index.html',   (req, res) => res.type('html').send(templates.index));
-app.get('/success.html', (req, res) => res.type('html').send(templates.success));
+function serveTemplate(filename) {
+  return function (req, res) {
+    try {
+      res.type('html').send(getTemplate(filename));
+    } catch (e) {
+      console.error('[Template]', e.message);
+      res.status(500).send('Errore interno — riprova tra poco.');
+    }
+  };
+}
+app.get('/',             serveTemplate('index.html'));
+app.get('/index.html',   serveTemplate('index.html'));
+app.get('/success.html', serveTemplate('success.html'));
 
 /* ─── File statici ─── */
 app.use(express.static(path.join(__dirname), { index: false }));
@@ -143,7 +158,7 @@ app.post('/api/create-payment-intent', checkoutLimiter, async function (req, res
   const clientEventId = req.body.eventId;
 
   try {
-    const paymentIntent = await stripe.paymentIntents.create({
+    const paymentIntent = await getStripe().paymentIntents.create({
       amount:   3900,
       currency: 'eur',
       automatic_payment_methods: { enabled: true },
@@ -197,7 +212,7 @@ app.get('/api/purchase-confirm', async function (req, res) {
   }
 
   try {
-    const pi = await stripe.paymentIntents.retrieve(payment_intent, {
+    const pi = await getStripe().paymentIntents.retrieve(payment_intent, {
       expand: ['latest_charge'],
     });
 
@@ -287,7 +302,7 @@ app.post('/api/webhook', async function (req, res) {
   let event;
   try {
     if (secret) {
-      event = stripe.webhooks.constructEvent(req.body, sig, secret);
+      event = getStripe().webhooks.constructEvent(req.body, sig, secret);
     } else {
       /* senza secret accetta tutto — solo per sviluppo locale */
       event = JSON.parse(req.body.toString());
@@ -373,11 +388,15 @@ app.post('/api/webhook', async function (req, res) {
 });
 
 /* ─── 404 ─── */
-app.use((req, res) => res.status(404).type('html').send(templates.index));
+app.use((req, res) => {
+  try { res.status(404).type('html').send(getTemplate('index.html')); }
+  catch (_) { res.status(404).send('Pagina non trovata'); }
+});
 
 /* ─── Avvio locale (non eseguito su Vercel) ─── */
 if (!process.env.VERCEL) {
   const PORT = parseInt(process.env.PORT, 10) || 3000;
+  const isLive = (process.env.STRIPE_SECRET_KEY || '').startsWith('sk_live');
   app.listen(PORT, function () {
     console.log('');
     console.log('  Metodo Rituale Viso — Server');
@@ -386,7 +405,7 @@ if (!process.env.VERCEL) {
     console.log('  Stripe:      ' + (isLive ? '🔴 MODALITÀ LIVE' : '🟡 MODALITÀ TEST'));
     console.log('  Meta Pixel:  ' + (process.env.META_PIXEL_ID   ? '✓ ' + process.env.META_PIXEL_ID  : '— non configurato'));
     console.log('  Meta CAPI:   ' + (process.env.META_CAPI_TOKEN ? '✓ token presente'                : '— non configurato'));
-    console.log('  Supabase:    ' + (supabase                          ? '✓ connesso'        : '— non configurato'));
+    console.log('  Supabase:    ' + (supabase                    ? '✓ connesso'        : '— non configurato'));
     console.log('  Webhook:     ' + (process.env.STRIPE_WEBHOOK_SECRET ? '✓ firma attiva'   : '⚠️  firma non verificata'));
     console.log('');
     if (isLive) {
