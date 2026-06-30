@@ -211,7 +211,7 @@ app.post('/api/create-payment-intent', checkoutLimiter, async function (req, res
 
   } catch (err) {
     console.error('[Stripe Error]', err.message);
-    res.status(500).json({ error: 'Si è verificato un errore. Riprova.' });
+    res.status(500).json({ error: 'Si è verificato un errore. Riprova.', _debug: err.message });
   }
 });
 
