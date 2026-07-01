@@ -2237,11 +2237,17 @@
     submitBtn.disabled = true;
 
     try {
-      var res  = await fetch('/api/create-payment-intent', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ eventId: eventId }) });
-      var data = await res.json();
-      if (!data.clientSecret) throw new Error(data.error || 'Errore');
+      /* Fetch config e payment intent in parallelo */
+      var [cfgRes, piRes] = await Promise.all([
+        fetch('/api/config'),
+        fetch('/api/create-payment-intent', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ eventId: eventId }) }),
+      ]);
+      var cfg  = await cfgRes.json();
+      var data = await piRes.json();
+      if (!cfg.pk)             throw new Error('Configurazione non disponibile');
+      if (!data.clientSecret)  throw new Error(data.error || 'Errore');
 
-      stripeInst = Stripe('%%STRIPE_PK%%');
+      stripeInst = Stripe(cfg.pk);
       elemsInst  = stripeInst.elements({
         clientSecret: data.clientSecret,
         appearance: {

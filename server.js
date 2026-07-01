@@ -91,6 +91,12 @@ app.get('/api/health', function (req, res) {
   });
 });
 
+/* ─── Config pubblica (Stripe PK — mai segreti) ─── */
+app.get('/api/config', function (req, res) {
+  res.set('Cache-Control', 'no-store');
+  res.json({ pk: process.env.STRIPE_PUBLISHABLE_KEY || '' });
+});
+
 /* ─── Rate limiting ─── */
 const trackLimiter = rateLimit({
   windowMs:        60 * 1000,
