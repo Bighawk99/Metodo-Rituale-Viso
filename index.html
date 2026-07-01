@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Metodo Rituale Viso — Dieci minuti al giorno per un viso sgonfio e luminoso</title>
   <meta name="description" content="Dieci minuti al giorno per un ovale più pulito, occhi meno gonfi e più luce. Il giorno dopo. Senza aghi." />
+  <link rel="preload" as="image" href="hero.webp" type="image/webp"/>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -884,7 +885,7 @@
 ════════════════════════════════════════════════ -->
 <div id="socialToast" class="social-toast" role="status" aria-live="polite" aria-hidden="true">
   <div class="social-toast-dot" aria-hidden="true">
-    <img src="/product-thumb.png" alt="" width="42" height="42" style="width:42px;height:42px;object-fit:cover;display:block;" />
+    <picture><source srcset="/product-thumb.webp" type="image/webp"/><img src="/product-thumb.png" alt="" width="42" height="42" style="width:42px;height:42px;object-fit:cover;display:block;" loading="lazy"/></picture>
   </div>
   <div class="social-toast-body">
     <p class="social-toast-name" id="toastName">Marta B. ha acquistato</p>
@@ -1110,12 +1111,15 @@
 
     <!-- Hero image -->
     <div class="reveal" style="margin-top:var(--sp-7); border-radius:var(--radius); overflow:hidden; line-height:0;">
-      <img
-        src="hero.png"
-        alt="Donna sorridente con luce naturale — facial wellness"
-        style="width:100%; height:auto; display:block; border-radius:var(--radius);"
-        loading="eager"
-      />
+      <picture>
+        <source srcset="hero.webp" type="image/webp"/>
+        <img
+          src="hero.png"
+          alt="Donna sorridente con luce naturale — facial wellness"
+          style="width:100%; height:auto; display:block; border-radius:var(--radius);"
+          loading="eager" fetchpriority="high"
+        />
+      </picture>
     </div>
 
   </div>
@@ -1170,22 +1174,18 @@
     <div style="display:grid; grid-template-columns:1fr 1fr; gap:var(--sp-3); margin-top:0;" class="reveal reveal-delay-3">
 
       <div>
-        <img
-          src="prima.png"
-          alt="Prima — viso gonfio e stanco"
-          style="width:100%; height:420px; object-fit:cover; object-position:center top; border-radius:var(--radius); display:block;"
-          loading="lazy"
-        />
+        <picture>
+          <source srcset="prima.webp" type="image/webp"/>
+          <img src="prima.png" alt="Prima — viso gonfio e stanco" style="width:100%; height:420px; object-fit:cover; object-position:center top; border-radius:var(--radius); display:block;" loading="lazy"/>
+        </picture>
         <p style="font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--ink-muted); margin-top:10px; text-align:center;">Prima</p>
       </div>
 
       <div>
-        <img
-          src="dopo.png"
-          alt="Dopo — ovale più pulito e luminoso"
-          style="width:100%; height:420px; object-fit:cover; object-position:center top; border-radius:var(--radius); display:block;"
-          loading="lazy"
-        />
+        <picture>
+          <source srcset="dopo.webp" type="image/webp"/>
+          <img src="dopo.png" alt="Dopo — ovale più pulito e luminoso" style="width:100%; height:420px; object-fit:cover; object-position:center top; border-radius:var(--radius); display:block;" loading="lazy"/>
+        </picture>
         <p style="font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--accent); margin-top:10px; text-align:center;">Dopo</p>
       </div>
 
@@ -1296,11 +1296,11 @@
         <!-- Slide 1 -->
         <div class="pd-slide" style="display:grid; grid-template-columns:1fr 1fr; gap:var(--sp-2);">
           <div style="position:relative;">
-            <img src="prima-2.png" alt="Prima — viso gonfio" style="width:100%; height:460px; object-fit:cover; object-position:center top; border-radius:var(--radius); display:block;" loading="lazy" />
+            <picture><source srcset="prima-2.webp" type="image/webp"/><img src="prima-2.png" alt="Prima — viso gonfio" style="width:100%; height:460px; object-fit:cover; object-position:center top; border-radius:var(--radius); display:block;" loading="lazy"/></picture>
             <span style="position:absolute; bottom:12px; left:50%; transform:translateX(-50%); font-size:10px; font-weight:700; letter-spacing:2.5px; text-transform:uppercase; color:#fff; background:rgba(44,38,34,0.55); backdrop-filter:blur(6px); padding:5px 14px; border-radius:20px;">Prima</span>
           </div>
           <div style="position:relative;">
-            <img src="dopo-2.png" alt="Dopo — ovale sgonfiato" style="width:100%; height:460px; object-fit:cover; object-position:center top; border-radius:var(--radius); display:block;" loading="lazy" />
+            <picture><source srcset="dopo-2.webp" type="image/webp"/><img src="dopo-2.png" alt="Dopo — ovale sgonfiato" style="width:100%; height:460px; object-fit:cover; object-position:center top; border-radius:var(--radius); display:block;" loading="lazy"/></picture>
             <span style="position:absolute; bottom:12px; left:50%; transform:translateX(-50%); font-size:10px; font-weight:700; letter-spacing:2.5px; text-transform:uppercase; color:#fff; background:rgba(201,139,107,0.75); backdrop-filter:blur(6px); padding:5px 14px; border-radius:20px;">Dopo</span>
           </div>
         </div>
@@ -1308,11 +1308,11 @@
         <!-- Slide 2 -->
         <div class="pd-slide" style="display:none; grid-template-columns:1fr 1fr; gap:var(--sp-2);">
           <div style="position:relative;">
-            <img src="prima-3.png" alt="Prima — viso gonfio" style="width:100%; height:460px; object-fit:contain; object-position:center center; background:#e8e2da; border-radius:var(--radius); display:block;" loading="lazy" />
+            <picture><source srcset="prima-3.webp" type="image/webp"/><img src="prima-3.png" alt="Prima — viso gonfio" style="width:100%; height:460px; object-fit:contain; object-position:center center; background:#e8e2da; border-radius:var(--radius); display:block;" loading="lazy"/></picture>
             <span style="position:absolute; bottom:12px; left:50%; transform:translateX(-50%); font-size:10px; font-weight:700; letter-spacing:2.5px; text-transform:uppercase; color:#fff; background:rgba(44,38,34,0.55); backdrop-filter:blur(6px); padding:5px 14px; border-radius:20px;">Prima</span>
           </div>
           <div style="position:relative;">
-            <img src="dopo-3.png" alt="Dopo — ovale sgonfiato" style="width:100%; height:460px; object-fit:cover; object-position:center top; border-radius:var(--radius); display:block;" loading="lazy" />
+            <picture><source srcset="dopo-3.webp" type="image/webp"/><img src="dopo-3.png" alt="Dopo — ovale sgonfiato" style="width:100%; height:460px; object-fit:cover; object-position:center top; border-radius:var(--radius); display:block;" loading="lazy"/></picture>
             <span style="position:absolute; bottom:12px; left:50%; transform:translateX(-50%); font-size:10px; font-weight:700; letter-spacing:2.5px; text-transform:uppercase; color:#fff; background:rgba(201,139,107,0.75); backdrop-filter:blur(6px); padding:5px 14px; border-radius:20px;">Dopo</span>
           </div>
         </div>
@@ -1320,11 +1320,11 @@
         <!-- Slide 3 -->
         <div class="pd-slide" style="display:none; grid-template-columns:1fr 1fr; gap:var(--sp-2);">
           <div style="position:relative;">
-            <img src="prima-4.png" alt="Prima — viso gonfio" style="width:100%; height:460px; object-fit:contain; object-position:center center; background:#e8e2da; border-radius:var(--radius); display:block;" loading="lazy" />
+            <picture><source srcset="prima-4.webp" type="image/webp"/><img src="prima-4.png" alt="Prima — viso gonfio" style="width:100%; height:460px; object-fit:contain; object-position:center center; background:#e8e2da; border-radius:var(--radius); display:block;" loading="lazy"/></picture>
             <span style="position:absolute; bottom:12px; left:50%; transform:translateX(-50%); font-size:10px; font-weight:700; letter-spacing:2.5px; text-transform:uppercase; color:#fff; background:rgba(44,38,34,0.55); backdrop-filter:blur(6px); padding:5px 14px; border-radius:20px;">Prima</span>
           </div>
           <div style="position:relative;">
-            <img src="dopo-4.png" alt="Dopo — ovale sgonfiato" style="width:100%; height:460px; object-fit:cover; object-position:center top; border-radius:var(--radius); display:block;" loading="lazy" />
+            <picture><source srcset="dopo-4.webp" type="image/webp"/><img src="dopo-4.png" alt="Dopo — ovale sgonfiato" style="width:100%; height:460px; object-fit:cover; object-position:center top; border-radius:var(--radius); display:block;" loading="lazy"/></picture>
             <span style="position:absolute; bottom:12px; left:50%; transform:translateX(-50%); font-size:10px; font-weight:700; letter-spacing:2.5px; text-transform:uppercase; color:#fff; background:rgba(201,139,107,0.75); backdrop-filter:blur(6px); padding:5px 14px; border-radius:20px;">Dopo</span>
           </div>
         </div>
@@ -1963,7 +1963,7 @@
 
     <!-- Firma fondatrice -->
     <div class="reveal" style="margin-top:var(--sp-8); padding-top:var(--sp-6); border-top:1px solid var(--bg-deep);">
-      <img src="laila.png" alt="Laila, fondatrice di Metodo Rituale Viso" style="width:72px; height:72px; border-radius:50%; object-fit:cover; object-position:center top; display:block; margin:0 auto var(--sp-3);" />
+      <picture><source srcset="laila.webp" type="image/webp"/><img src="laila.png" alt="Laila, fondatrice di Metodo Rituale Viso" style="width:72px; height:72px; border-radius:50%; object-fit:cover; object-position:center top; display:block; margin:0 auto var(--sp-3);" loading="lazy"/></picture>
       <p class="f-serif" style="font-style:italic; font-size:1.1em; max-width:420px; margin:0 auto var(--sp-2); color:var(--ink-soft); line-height:1.6;">
         "Ho creato questo metodo perché ero stanca di sentirmi dire che quello che vedevo allo specchio era inevitabile. Non lo era. Non lo è."
       </p>
