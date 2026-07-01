@@ -2151,16 +2151,19 @@
   /* ViewContent — offerta entra nel viewport */
   var offerEl = document.getElementById('offerta');
   if (offerEl) {
+    var vcFired = false;
+    function fireViewContent() {
+      if (vcFired || typeof fbq === 'undefined') return;
+      vcFired = true;
+      fbq('track', 'ViewContent', { content_name: 'Metodo Rituale Viso', content_category: 'Facial Wellness', content_ids: ['metodo-rituale-viso'], content_type: 'product', value: 39.00, currency: 'EUR' });
+    }
+    /* Scatta se sezione offerta visibile */
     var offerObs = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) {
-        if (!e.isIntersecting) return;
-        if (typeof fbq !== 'undefined') {
-          fbq('track', 'ViewContent', { content_name: 'Metodo Rituale Viso', content_category: 'Facial Wellness', content_ids: ['metodo-rituale-viso'], content_type: 'product', value: 39.00, currency: 'EUR' });
-        }
-        offerObs.disconnect();
-      });
+      entries.forEach(function (e) { if (e.isIntersecting) { fireViewContent(); offerObs.disconnect(); } });
     }, { threshold: 0.25 });
     offerObs.observe(offerEl);
+    /* Fallback: scatta dopo 5s anche senza scroll (mobile che rimane sulla hero) */
+    setTimeout(fireViewContent, 5000);
   }
   /* Scroll depth */
   var depths = [25, 50, 75, 90], fired = {};
