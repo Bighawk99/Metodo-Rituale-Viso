@@ -28,25 +28,20 @@ const supabase = (process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_KEY)
   ? createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_KEY)
   : null;
 
-/* ─── Template HTML: caricamento lazy con cache ─── */
-const _templates = {};
+/* ─── Template HTML: lettura diretta senza cache (garantisce env vars aggiornate) ─── */
 function getTemplate(filename) {
-  if (!_templates[filename]) {
-    /* Cerca prima in __dirname, poi in process.cwd() (compatibilità Vercel) */
-    const candidates = [
-      path.join(__dirname, filename),
-      path.join(process.cwd(), filename),
-    ];
-    let raw = null;
-    for (const p of candidates) {
-      try { raw = fs.readFileSync(p, 'utf8'); break; } catch (_) {}
-    }
-    if (!raw) throw new Error('File HTML non trovato: ' + filename);
-    _templates[filename] = raw
-      .replace(/%%META_PIXEL_ID%%/g,  process.env.META_PIXEL_ID          || '')
-      .replace(/%%STRIPE_PK%%/g,      process.env.STRIPE_PUBLISHABLE_KEY || '');
+  const candidates = [
+    path.join(__dirname, filename),
+    path.join(process.cwd(), filename),
+  ];
+  let raw = null;
+  for (const p of candidates) {
+    try { raw = fs.readFileSync(p, 'utf8'); break; } catch (_) {}
   }
-  return _templates[filename];
+  if (!raw) throw new Error('File HTML non trovato: ' + filename);
+  return raw
+    .replace(/%%META_PIXEL_ID%%/g,  process.env.META_PIXEL_ID          || '')
+    .replace(/%%STRIPE_PK%%/g,      process.env.STRIPE_PUBLISHABLE_KEY || '');
 }
 
 /* ─── App ─── */
