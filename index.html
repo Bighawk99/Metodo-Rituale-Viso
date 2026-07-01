@@ -13,18 +13,25 @@
 
   <script src="https://js.stripe.com/v3/" defer></script>
 
-  <!-- Meta Pixel -->
+  <!-- Meta Pixel — si attiva solo dopo consenso cookie -->
   <script>
-  !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-  n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
-  n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
-  t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
-  document,'script','https://connect.facebook.net/en_US/fbevents.js');
-  fbq('init', '%%META_PIXEL_ID%%');
-  fbq('track', 'PageView');
+  window._pixelId = '%%META_PIXEL_ID%%';
+  window._pixelReady = false;
+  function initMetaPixel() {
+    if (window._pixelReady) return;
+    window._pixelReady = true;
+    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+    n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+    document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    fbq('consent', 'grant');
+    fbq('init', window._pixelId);
+    fbq('track', 'PageView');
+  }
+  /* Se consenso già dato in precedenza, attiva subito */
+  if (localStorage.getItem('cookie_consent') === 'yes') { initMetaPixel(); }
   </script>
-  <noscript><img height="1" width="1" style="display:none"
-  src="https://www.facebook.com/tr?id=%%META_PIXEL_ID%%&ev=PageView&noscript=1"/></noscript>
   <!-- End Meta Pixel -->
 
   <style>
@@ -920,10 +927,10 @@
   <!-- Price + CTA row -->
   <div class="sticky-cta-row">
     <div class="sticky-price-block">
-      <span class="sticky-price-old">179 €</span>
-      <span class="sticky-price-new">39 €</span>
+      <span class="sticky-price-old">39 €</span>
+      <span class="sticky-price-new">%%PRICE_EUR%% €</span>
     </div>
-    <button class="sticky-btn sticky-rock" data-modal="pay" tabindex="-1" aria-label="Inizia il percorso — 39 euro">
+    <button class="sticky-btn sticky-rock" data-modal="pay" tabindex="-1" aria-label="Inizia il percorso — %%PRICE_EUR%% euro">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
       Inizia il percorso
     </button>
@@ -969,7 +976,7 @@
         <span style="font-size:13px; color:rgba(246,241,234,0.35); text-decoration:line-through;">179 €</span>
         <span style="background:var(--accent); color:#fff; font-size:10px; font-weight:700; padding:3px 9px; border-radius:20px; letter-spacing:0.5px;">−78%</span>
       </div>
-      <div style="font-family:'Fraunces',serif; font-size:clamp(2.2rem,8vw,3rem); font-weight:700; color:var(--bg); line-height:1;">39 €</div>
+      <div style="font-family:'Fraunces',serif; font-size:clamp(2.2rem,8vw,3rem); font-weight:700; color:var(--bg); line-height:1;">%%PRICE_EUR%% €</div>
       <p style="font-size:12px; color:rgba(246,241,234,0.38); margin-top:5px;">Pagamento unico · Nessun abbonamento</p>
     </div>
 
@@ -1816,7 +1823,7 @@
       <div style="display:flex; justify-content:center; margin-bottom:var(--sp-5);">
         <span style="background:rgba(201,139,107,0.18); border:1px solid rgba(201,139,107,0.35); color:var(--accent); font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase; padding:7px 18px; border-radius:20px; display:flex; align-items:center; gap:8px;">
           <svg width="7" height="7" viewBox="0 0 8 8" aria-hidden="true"><circle cx="4" cy="4" r="4" fill="var(--accent)"/></svg>
-          Offerta lancio · Solo per poche ore
+          Prezzo di lancio · Disponibile ora
         </span>
       </div>
 
@@ -1856,11 +1863,11 @@
       <!-- Prezzo -->
       <div style="text-align:center; margin-bottom:var(--sp-2);">
         <div style="display:flex; align-items:center; justify-content:center; gap:14px; margin-bottom:6px;">
-          <p style="font-size:14px; color:rgba(246,241,234,0.35); text-decoration:line-through; margin:0;">179 €</p>
-          <span style="background:var(--accent); color:#fff; font-size:11px; font-weight:700; padding:3px 10px; border-radius:20px; letter-spacing:0.5px;">−78%</span>
+          <p style="font-size:14px; color:rgba(246,241,234,0.35); text-decoration:line-through; margin:0;">39 €</p>
+          <span style="background:var(--accent); color:#fff; font-size:11px; font-weight:700; padding:3px 10px; border-radius:20px; letter-spacing:0.5px;">Prezzo lancio</span>
         </div>
-        <div class="price-display" aria-label="Prezzo 39 euro">39 €</div>
-        <p style="font-size:13px; color:rgba(246,241,234,0.35); margin-top:8px;">Pagamento unico · PDF scaricabile immediatamente dopo l'acquisto</p>
+        <div class="price-display" aria-label="Prezzo %%PRICE_EUR%% euro">%%PRICE_EUR%% €</div>
+        <p style="font-size:13px; color:rgba(246,241,234,0.35); margin-top:8px;">Pagamento unico · Nessun abbonamento · PDF scaricabile subito</p>
       </div>
 
       <!-- Separatore -->
@@ -2490,6 +2497,45 @@
   window.addEventListener('visibilitychange', function () {
     if (document.visibilityState === 'hidden')
       send('TimeOnPage', { seconds: Math.round((Date.now() - start) / 1000) });
+  });
+})();
+</script>
+
+<!-- ── Cookie Banner ── -->
+<div id="cookieBanner" style="display:none; position:fixed; bottom:0; left:0; right:0; z-index:9999;
+  background:#2C2622; color:#F6F1EA; padding:16px 20px;
+  box-shadow:0 -4px 24px rgba(0,0,0,0.18); font-family:'Inter',sans-serif;">
+  <div style="max-width:760px; margin:0 auto; display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
+    <p style="flex:1; font-size:13px; line-height:1.6; color:rgba(246,241,234,0.75); margin:0; min-width:200px;">
+      Usiamo cookie analitici (Meta Pixel) per migliorare le inserzioni e misurare i risultati.
+      <a href="privacy.html" style="color:#C98B6B; text-decoration:none;">Privacy policy</a>
+    </p>
+    <div style="display:flex; gap:10px; flex-shrink:0;">
+      <button id="cookieDecline" style="background:transparent; border:1px solid rgba(246,241,234,0.2);
+        color:rgba(246,241,234,0.5); padding:9px 18px; border-radius:8px; font-size:13px;
+        cursor:pointer; font-family:'Inter',sans-serif;">Rifiuta</button>
+      <button id="cookieAccept" style="background:#C98B6B; border:none; color:#fff;
+        padding:9px 22px; border-radius:8px; font-size:13px; font-weight:700;
+        cursor:pointer; font-family:'Inter',sans-serif;">Accetta</button>
+    </div>
+  </div>
+</div>
+<script>
+(function () {
+  var consent = localStorage.getItem('cookie_consent');
+  var banner  = document.getElementById('cookieBanner');
+  if (consent) return; /* già scelto */
+  setTimeout(function () { banner.style.display = 'block'; }, 1200);
+
+  document.getElementById('cookieAccept').addEventListener('click', function () {
+    localStorage.setItem('cookie_consent', 'yes');
+    banner.style.display = 'none';
+    initMetaPixel();
+  });
+  document.getElementById('cookieDecline').addEventListener('click', function () {
+    localStorage.setItem('cookie_consent', 'no');
+    banner.style.display = 'none';
+    if (typeof fbq !== 'undefined') fbq('consent', 'revoke');
   });
 })();
 </script>
