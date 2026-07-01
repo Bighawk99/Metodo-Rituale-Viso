@@ -2478,7 +2478,10 @@
 (function () {
   var start = Date.now();
   function send(evt, data) {
-    try { navigator.sendBeacon('/api/track', JSON.stringify({ event: evt, payload: data })); } catch (_) {}
+    try {
+      var blob = new Blob([JSON.stringify({ event: evt, payload: data })], { type: 'application/json' });
+      navigator.sendBeacon('/api/track', blob);
+    } catch (_) {}
   }
   send('PageView', { referrer: document.referrer || '', path: location.pathname });
   window.addEventListener('visibilitychange', function () {
