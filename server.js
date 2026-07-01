@@ -12,6 +12,11 @@ const fs               = require('fs');
 const path             = require('path');
 const { createClient } = require('@supabase/supabase-js');
 
+/* ─── PREZZO ─────────────────────────────────────────────────────────────────
+   Per cambiare il prezzo: modifica PRICE_CENTS nelle env var Vercel.
+   Esempi: 100 = €1,00 (test) | 3900 = €39,00 (produzione)              ─── */
+const PRICE_CENTS = parseInt(process.env.PRICE_CENTS, 10) || 3900;
+
 /* ─── Stripe (lazy — non crasha se la chiave manca al boot) ─── */
 let _stripe = null;
 function getStripe() {
@@ -39,9 +44,12 @@ function getTemplate(filename) {
     try { raw = fs.readFileSync(p, 'utf8'); break; } catch (_) {}
   }
   if (!raw) throw new Error('File HTML non trovato: ' + filename);
+  const priceEur = (PRICE_CENTS / 100).toFixed(2).replace('.', ',');
   return raw
     .replace(/%%META_PIXEL_ID%%/g,  process.env.META_PIXEL_ID          || '')
-    .replace(/%%STRIPE_PK%%/g,      process.env.STRIPE_PUBLISHABLE_KEY || '');
+    .replace(/%%STRIPE_PK%%/g,      process.env.STRIPE_PUBLISHABLE_KEY || '')
+    .replace(/%%PRICE_EUR%%/g,      priceEur)
+    .replace(/%%PRICE_VALUE%%/g,    (PRICE_CENTS / 100).toFixed(2));
 }
 
 /* ─── App ─── */
@@ -267,7 +275,7 @@ app.post('/api/create-payment-intent', checkoutLimiter, async function (req, res
 
   try {
     const paymentIntent = await getStripe().paymentIntents.create({
-      amount:   3900,
+      amount:   PRICE_CENTS,
       currency: 'eur',
       automatic_payment_methods: { enabled: true },
       description: 'Metodo Rituale Viso — Percorso completo',
@@ -279,14 +287,14 @@ app.post('/api/create-payment-intent', checkoutLimiter, async function (req, res
       'InitiateCheckout',
       clientEventId || crypto.randomUUID(),
       { client_ip_address: req.ip, client_user_agent: req.get('user-agent') || '' },
-      { value: 39.00, currency: 'EUR', content_ids: ['metodo-rituale-viso'], content_type: 'product', num_items: 1 },
+      { value: (PRICE_CENTS / 100).toFixed(2), currency: 'EUR', content_ids: ['metodo-rituale-viso'], content_type: 'product', num_items: 1 },
       process.env.BASE_URL + '/#offerta'
     ).catch(e => console.error('[CAPI InitiateCheckout]', e.message));
 
     /* Supabase: evento checkout avviato */
     saveEvent('InitiateCheckout', 1, 'checkout_started', {
       payment_intent_id: paymentIntent.id,
-      amount:            39.00,
+      amount:            PRICE_CENTS / 100,
       currency:          'EUR',
       ip:                req.ip,
       user_agent:        req.get('user-agent') || '',
