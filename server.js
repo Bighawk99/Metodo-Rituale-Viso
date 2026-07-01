@@ -97,6 +97,12 @@ app.get('/api/health', function (req, res) {
 });
 
 /* ─── Rate limiting ─── */
+const trackLimiter = rateLimit({
+  windowMs:        60 * 1000,
+  max:             60,
+  standardHeaders: true,
+  legacyHeaders:   false,
+});
 const checkoutLimiter = rateLimit({
   windowMs:        15 * 60 * 1000,
   max:             30,
@@ -113,6 +119,7 @@ app.use(express.json({ limit: '10kb' }));
 function serveTemplate(filename) {
   return function (req, res) {
     try {
+      res.set('Cache-Control', 'no-store');
       res.type('html').send(getTemplate(filename));
     } catch (e) {
       console.error('[Template]', e.message);
@@ -123,6 +130,7 @@ function serveTemplate(filename) {
 app.get('/',             serveTemplate('index.html'));
 app.get('/index.html',   serveTemplate('index.html'));
 app.get('/success.html', serveTemplate('success.html'));
+app.get('/admin',        serveTemplate('admin.html'));
 
 /* ─── File statici ─── */
 app.use(express.static(path.join(__dirname), { index: false }));
@@ -172,6 +180,83 @@ async function sendCapiEvent(eventName, eventId, userData, customData, sourceUrl
   if (result.error) throw new Error(result.error.message);
   console.log('[Meta CAPI] ' + eventName + ' — eventi ricevuti: ' + result.events_received);
 }
+
+/* ─── POST /api/track ───────────────────────────────────────────────────────
+   Traccia eventi browser (PageView, TimeOnPage) su Supabase.                  */
+app.post('/api/track', trackLimiter, async function (req, res) {
+  const { event, payload } = req.body;
+  const allowed = ['PageView', 'TimeOnPage'];
+  if (!allowed.includes(event)) return res.status(400).json({ error: 'Evento non valido' });
+
+  await saveEvent(event, null, 'browser', {
+    ...payload,
+    ip:         req.ip,
+    user_agent: req.get('user-agent') || '',
+    referrer:   req.get('referer') || '',
+  });
+  res.json({ ok: true });
+});
+
+/* ─── GET /api/admin/stats ───────────────────────────────────────────────────
+   Statistiche aggregate protette da ADMIN_PASSWORD.                           */
+app.get('/api/admin/stats', async function (req, res) {
+  const pwd = process.env.ADMIN_PASSWORD;
+  if (pwd && req.query.password !== pwd) {
+    return res.status(401).json({ error: 'Password non corretta' });
+  }
+  if (!supabase) return res.status(503).json({ error: 'Supabase non configurato' });
+
+  try {
+    const [
+      { count: totalViews },
+      { count: todayViews },
+      { count: checkouts },
+      { data: orders },
+      { data: timeEvents },
+      { data: dailyRaw },
+    ] = await Promise.all([
+      supabase.from('events').select('*', { count: 'exact', head: true }).eq('event_name', 'PageView'),
+      supabase.from('events').select('*', { count: 'exact', head: true }).eq('event_name', 'PageView')
+        .gte('created_at', new Date(Date.now() - 86400000).toISOString()),
+      supabase.from('events').select('*', { count: 'exact', head: true }).eq('event_name', 'InitiateCheckout'),
+      supabase.from('orders').select('amount, status, customer_email, paid_at, config').eq('status', 'succeeded').order('paid_at', { ascending: false }).limit(50),
+      supabase.from('events').select('payload').eq('event_name', 'TimeOnPage').limit(500),
+      supabase.from('events').select('created_at').eq('event_name', 'PageView')
+        .gte('created_at', new Date(Date.now() - 7 * 86400000).toISOString()),
+    ]);
+
+    const completedOrders = orders || [];
+    const revenue  = completedOrders.reduce(function (s, o) { return s + (o.amount || 0); }, 0);
+    const avgSecs  = timeEvents && timeEvents.length
+      ? Math.round(timeEvents.reduce(function (s, e) { return s + (e.payload?.seconds || 0); }, 0) / timeEvents.length)
+      : 0;
+
+    /* Visite per giorno (ultimi 7) */
+    const dayMap = {};
+    for (var i = 6; i >= 0; i--) {
+      var d = new Date(Date.now() - i * 86400000);
+      dayMap[d.toISOString().slice(0, 10)] = 0;
+    }
+    (dailyRaw || []).forEach(function (e) {
+      var day = e.created_at.slice(0, 10);
+      if (dayMap[day] !== undefined) dayMap[day]++;
+    });
+
+    res.json({
+      views:     { total: totalViews || 0, today: todayViews || 0 },
+      checkouts: checkouts || 0,
+      sales:     { count: completedOrders.length, revenue: revenue },
+      avgTime:   avgSecs,
+      convCheckout: totalViews ? ((checkouts || 0) / totalViews * 100).toFixed(1) : '0.0',
+      convSale:     (checkouts || 0) ? (completedOrders.length / (checkouts || 1) * 100).toFixed(1) : '0.0',
+      daily:     dayMap,
+      orders:    completedOrders.slice(0, 20),
+    });
+  } catch (err) {
+    console.error('[Admin stats]', err.message);
+    res.status(500).json({ error: err.message });
+  }
+});
 
 /* ─── POST /api/create-payment-intent ───────────────────────────────────────
    Crea un PaymentIntent Stripe e restituisce il clientSecret al browser.

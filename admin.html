@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Admin — Metodo Rituale Viso</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg:#F6F1EA; --bg-warm:#E8DDCF; --bg-deep:#DDD0BE;
+      --ink:#2C2622; --ink-soft:#6B5C54; --ink-muted:#A0948D;
+      --accent:#C98B6B; --green:#2a7a55; --red:#b34a35;
+      --radius:16px; --card:#fff;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{font-size:15px}
+    body{background:var(--bg);color:var(--ink);font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;min-height:100vh}
+
+    /* ── Login ── */
+    #loginScreen{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px}
+    .login-card{background:var(--card);border-radius:var(--radius);padding:48px 40px;width:100%;max-width:380px;box-shadow:0 4px 24px rgba(44,38,34,0.08);text-align:center}
+    .login-card h1{font-family:'Fraunces',serif;font-size:1.6rem;font-weight:600;margin-bottom:6px}
+    .login-card p{color:var(--ink-soft);font-size:14px;margin-bottom:28px}
+    .login-card input{width:100%;border:1.5px solid var(--bg-deep);border-radius:10px;padding:12px 14px;font-size:15px;font-family:'Inter',sans-serif;outline:none;background:var(--bg);color:var(--ink);margin-bottom:12px;transition:border 0.15s}
+    .login-card input:focus{border-color:var(--accent)}
+    .login-card button{width:100%;background:var(--ink);color:#fff;border:none;border-radius:10px;padding:13px;font-size:15px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:background 0.15s}
+    .login-card button:hover{background:#3d3330}
+    .login-error{color:var(--red);font-size:13px;margin-top:8px;display:none}
+
+    /* ── Dashboard ── */
+    #dashboard{display:none;padding:0 0 60px}
+    header{background:var(--card);border-bottom:1px solid var(--bg-deep);padding:16px 32px;display:flex;align-items:center;justify-content:space-between}
+    header .logo{font-family:'Fraunces',serif;font-style:italic;font-size:1.05rem;font-weight:600;color:var(--ink)}
+    header .logo span{color:var(--accent)}
+    header .badge{font-size:12px;font-weight:600;background:rgba(42,122,85,0.12);color:var(--green);padding:4px 12px;border-radius:20px}
+    .dash-inner{max-width:1100px;margin:0 auto;padding:32px 24px}
+
+    /* date range */
+    .toolbar{display:flex;align-items:center;gap:12px;margin-bottom:28px;flex-wrap:wrap}
+    .toolbar h2{font-family:'Fraunces',serif;font-size:1.3rem;font-weight:600;flex:1}
+    .range-btn{font-size:12px;font-weight:600;padding:6px 14px;border-radius:20px;border:1.5px solid var(--bg-deep);background:transparent;cursor:pointer;color:var(--ink-soft);transition:all 0.15s}
+    .range-btn.active,.range-btn:hover{background:var(--ink);color:#fff;border-color:var(--ink)}
+    .logout-btn{font-size:12px;color:var(--ink-muted);background:none;border:none;cursor:pointer;padding:6px 10px;border-radius:8px}
+    .logout-btn:hover{color:var(--red)}
+
+    /* ── Cards ── */
+    .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:28px}
+    .card{background:var(--card);border-radius:var(--radius);padding:22px 24px;box-shadow:0 2px 8px rgba(44,38,34,0.05)}
+    .card .label{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-muted);margin-bottom:8px}
+    .card .value{font-size:2rem;font-weight:700;color:var(--ink);line-height:1.1}
+    .card .sub{font-size:12px;color:var(--ink-muted);margin-top:4px}
+    .card.accent .value{color:var(--accent)}
+    .card.green .value{color:var(--green)}
+
+    /* ── Chart ── */
+    .chart-box{background:var(--card);border-radius:var(--radius);padding:24px;margin-bottom:28px;box-shadow:0 2px 8px rgba(44,38,34,0.05)}
+    .chart-box h3{font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--ink-muted);margin-bottom:20px}
+    .chart{display:flex;align-items:flex-end;gap:8px;height:120px}
+    .bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px}
+    .bar{width:100%;background:var(--accent);border-radius:4px 4px 0 0;min-height:3px;transition:height 0.4s ease}
+    .bar-label{font-size:10px;color:var(--ink-muted);text-align:center;white-space:nowrap}
+    .bar-val{font-size:11px;font-weight:600;color:var(--ink-soft)}
+
+    /* ── Table ── */
+    .table-box{background:var(--card);border-radius:var(--radius);padding:24px;box-shadow:0 2px 8px rgba(44,38,34,0.05);overflow-x:auto}
+    .table-box h3{font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--ink-muted);margin-bottom:16px}
+    table{width:100%;border-collapse:collapse;font-size:13px}
+    th{text-align:left;padding:8px 12px;color:var(--ink-muted);font-weight:600;font-size:11px;letter-spacing:0.5px;border-bottom:2px solid var(--bg-deep)}
+    td{padding:12px 12px;border-bottom:1px solid var(--bg-warm);color:var(--ink-soft)}
+    td.name{color:var(--ink);font-weight:500}
+    td.amount{color:var(--green);font-weight:700}
+    tr:last-child td{border-bottom:none}
+    .status-badge{display:inline-block;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:600;background:rgba(42,122,85,0.12);color:var(--green)}
+
+    /* empty */
+    .empty{text-align:center;padding:48px 24px;color:var(--ink-muted);font-size:14px}
+
+    /* loading */
+    #loadingScreen{display:none;align-items:center;justify-content:center;min-height:100vh}
+    .spinner{width:36px;height:36px;border:3px solid var(--bg-deep);border-top-color:var(--accent);border-radius:50%;animation:spin 0.7s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    @media(max-width:600px){
+      .cards{grid-template-columns:1fr 1fr}
+      .dash-inner{padding:20px 16px}
+      header{padding:14px 16px}
+    }
+  </style>
+</head>
+<body>
+
+<!-- Login -->
+<div id="loginScreen">
+  <div class="login-card">
+    <h1>Admin</h1>
+    <p>Metodo Rituale Viso — Statistiche</p>
+    <input type="password" id="pwdInput" placeholder="Password" autocomplete="current-password"/>
+    <button id="loginBtn">Accedi</button>
+    <p class="login-error" id="loginError">Password non corretta</p>
+  </div>
+</div>
+
+<!-- Loading -->
+<div id="loadingScreen" style="display:none;align-items:center;justify-content:center;min-height:100vh">
+  <div class="spinner"></div>
+</div>
+
+<!-- Dashboard -->
+<div id="dashboard">
+  <header>
+    <span class="logo">Metodo <span>·</span> Rituale <span>·</span> Viso</span>
+    <span class="badge">Admin</span>
+  </header>
+
+  <div class="dash-inner">
+    <div class="toolbar">
+      <h2>Dashboard</h2>
+      <button class="logout-btn" id="logoutBtn">Esci</button>
+    </div>
+
+    <!-- KPI Cards -->
+    <div class="cards" id="cards">
+      <div class="card"><div class="label">Visite totali</div><div class="value" id="kViews">—</div><div class="sub" id="kViewsSub">—</div></div>
+      <div class="card"><div class="label">Checkout aperti</div><div class="value" id="kCheckouts">—</div><div class="sub" id="kConvC">conv. da visite</div></div>
+      <div class="card green"><div class="label">Pagamenti</div><div class="value" id="kSales">—</div><div class="sub" id="kConvS">conv. da checkout</div></div>
+      <div class="card accent"><div class="label">Incasso</div><div class="value" id="kRevenue">—</div><div class="sub">IVA esclusa</div></div>
+      <div class="card"><div class="label">Permanenza media</div><div class="value" id="kTime">—</div><div class="sub">sulla landing</div></div>
+    </div>
+
+    <!-- Chart visite 7gg -->
+    <div class="chart-box">
+      <h3>Visite — ultimi 7 giorni</h3>
+      <div class="chart" id="chart"></div>
+    </div>
+
+    <!-- Tabella ordini -->
+    <div class="table-box">
+      <h3>Ultimi ordini</h3>
+      <div id="tableWrap"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var pwd = sessionStorage.getItem('admin_pwd') || '';
+  var loginScreen  = document.getElementById('loginScreen');
+  var loadingScreen= document.getElementById('loadingScreen');
+  var dashboard    = document.getElementById('dashboard');
+  var pwdInput     = document.getElementById('pwdInput');
+  var loginBtn     = document.getElementById('loginBtn');
+  var loginError   = document.getElementById('loginError');
+
+  function fmt(n) { return (n || 0).toFixed(2).replace('.', ',') + ' €'; }
+  function fmtTime(s) {
+    if (!s) return '—';
+    if (s < 60) return s + 's';
+    return Math.floor(s / 60) + 'm ' + (s % 60) + 's';
+  }
+  function fmtDay(iso) {
+    var d = new Date(iso);
+    return ['Dom','Lun','Mar','Mer','Gio','Ven','Sab'][d.getDay()];
+  }
+
+  function loadStats(password) {
+    loginScreen.style.display  = 'none';
+    loadingScreen.style.display = 'flex';
+
+    fetch('/api/admin/stats?password=' + encodeURIComponent(password))
+      .then(function (r) {
+        if (r.status === 401) { loadingScreen.style.display='none'; loginScreen.style.display='flex'; loginError.style.display='block'; sessionStorage.removeItem('admin_pwd'); return null; }
+        return r.json();
+      })
+      .then(function (d) {
+        if (!d) return;
+        loadingScreen.style.display = 'none';
+        dashboard.style.display     = 'block';
+
+        /* KPI */
+        document.getElementById('kViews').textContent    = (d.views.total || 0).toLocaleString('it');
+        document.getElementById('kViewsSub').textContent = 'oggi: ' + (d.views.today || 0);
+        document.getElementById('kCheckouts').textContent= (d.checkouts || 0).toLocaleString('it');
+        document.getElementById('kConvC').textContent    = d.convCheckout + '% conv. da visite';
+        document.getElementById('kSales').textContent    = (d.sales.count || 0).toLocaleString('it');
+        document.getElementById('kConvS').textContent    = d.convSale + '% conv. da checkout';
+        document.getElementById('kRevenue').textContent  = fmt(d.sales.revenue);
+        document.getElementById('kTime').textContent     = fmtTime(d.avgTime);
+
+        /* Chart */
+        var chart = document.getElementById('chart');
+        var days  = Object.entries(d.daily);
+        var max   = Math.max.apply(null, days.map(function (x) { return x[1]; })) || 1;
+        chart.innerHTML = days.map(function (x) {
+          var pct = Math.max(4, Math.round(x[1] / max * 100));
+          return '<div class="bar-col">'
+            + '<div class="bar-val">' + x[1] + '</div>'
+            + '<div class="bar" style="height:' + pct + '%"></div>'
+            + '<div class="bar-label">' + fmtDay(x[0]) + '<br/>' + x[0].slice(5) + '</div>'
+            + '</div>';
+        }).join('');
+
+        /* Tabella ordini */
+        var wrap = document.getElementById('tableWrap');
+        if (!d.orders || !d.orders.length) {
+          wrap.innerHTML = '<div class="empty">Nessun ordine ancora.</div>';
+          return;
+        }
+        var rows = d.orders.map(function (o) {
+          var name  = (o.config && o.config.customer_name) || '—';
+          var email = o.customer_email || '—';
+          var date  = o.paid_at ? new Date(o.paid_at).toLocaleString('it-IT', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' }) : '—';
+          return '<tr>'
+            + '<td class="name">' + name + '</td>'
+            + '<td>' + email + '</td>'
+            + '<td class="amount">' + fmt(o.amount) + '</td>'
+            + '<td><span class="status-badge">Pagato</span></td>'
+            + '<td>' + date + '</td>'
+            + '</tr>';
+        }).join('');
+        wrap.innerHTML = '<table><thead><tr><th>Nome</th><th>Email</th><th>Importo</th><th>Stato</th><th>Data</th></tr></thead><tbody>' + rows + '</tbody></table>';
+      })
+      .catch(function (e) {
+        loadingScreen.style.display = 'none';
+        loginScreen.style.display   = 'flex';
+        loginError.textContent = 'Errore di connessione';
+        loginError.style.display = 'block';
+      });
+  }
+
+  /* Auto-login se password salvata */
+  if (pwd) { loadStats(pwd); }
+
+  loginBtn.addEventListener('click', function () {
+    var p = pwdInput.value.trim();
+    if (!p) return;
+    sessionStorage.setItem('admin_pwd', p);
+    pwd = p;
+    loginError.style.display = 'none';
+    loadStats(p);
+  });
+  pwdInput.addEventListener('keydown', function (e) { if (e.key === 'Enter') loginBtn.click(); });
+
+  document.getElementById('logoutBtn').addEventListener('click', function () {
+    sessionStorage.removeItem('admin_pwd');
+    dashboard.style.display = 'none';
+    loginScreen.style.display = 'flex';
+    pwdInput.value = '';
+  });
+})();
+</script>
+
+</body>
+</html>
