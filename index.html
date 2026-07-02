@@ -2244,7 +2244,7 @@
 
     /* Pixel: InitiateCheckout */
     if (typeof fbq !== 'undefined') {
-      fbq('track', 'InitiateCheckout', { content_name: 'Metodo Rituale Viso', content_ids: ['metodo-rituale-viso'], content_type: 'product', value: 39.00, currency: 'EUR', num_items: 1 }, { eventID: eventId });
+      fbq('track', 'InitiateCheckout', { content_name: 'Metodo Rituale Viso', content_ids: ['metodo-rituale-viso'], content_type: 'product', value: %%PRICE_VALUE%%, currency: 'EUR', num_items: 1 }, { eventID: eventId });
     }
 
     submitBtn.disabled = true;

@@ -5,6 +5,7 @@ require('dotenv').config();
 const express          = require('express');
 const helmet           = require('helmet');
 const cors             = require('cors');
+const cookieParser     = require('cookie-parser');
 const rateLimit        = require('express-rate-limit');
 const Stripe           = require('stripe');
 const crypto           = require('crypto');
@@ -87,6 +88,10 @@ app.use(cors({
   methods: ['GET', 'POST'],
 }));
 
+/* Cookie parser: serve a leggere _fbp/_fbc (impostati da fbevents.js)
+   per inoltrarli alla Conversions API e migliorare il match rate. */
+app.use(cookieParser());
+
 /* ─── Health check (debug) ─── */
 app.get('/api/health', function (req, res) {
   res.json({
@@ -147,6 +152,22 @@ app.use(express.static(path.join(__dirname), { index: false }));
 /* ─── Helpers ─── */
 function sha256(value) {
   return crypto.createHash('sha256').update(value.trim().toLowerCase()).digest('hex');
+}
+
+/* Base user_data comune a tutti gli eventi CAPI: ip, user agent e i cookie
+   _fbp/_fbc impostati dal Meta Pixel nel browser. Senza fbp/fbc il match
+   rate lato server crolla perché Meta non riesce ad abbinare l'evento
+   alla sessione/browser che ha generato il click sull'inserzione. */
+function baseUserData(req) {
+  const userData = {
+    client_ip_address: req.ip,
+    client_user_agent: req.get('user-agent') || '',
+  };
+  const fbp = req.cookies?._fbp;
+  const fbc = req.cookies?._fbc;
+  if (fbp) userData.fbp = fbp;
+  if (fbc) userData.fbc = fbc;
+  return userData;
 }
 
 async function saveEvent(eventName, step, stepName, payload) {
@@ -286,7 +307,7 @@ app.post('/api/create-payment-intent', checkoutLimiter, async function (req, res
     sendCapiEvent(
       'InitiateCheckout',
       clientEventId || crypto.randomUUID(),
-      { client_ip_address: req.ip, client_user_agent: req.get('user-agent') || '' },
+      baseUserData(req),
       { value: (PRICE_CENTS / 100).toFixed(2), currency: 'EUR', content_ids: ['metodo-rituale-viso'], content_type: 'product', num_items: 1 },
       process.env.BASE_URL + '/#offerta'
     ).catch(e => console.error('[CAPI InitiateCheckout]', e.message));
@@ -366,7 +387,7 @@ app.get('/api/purchase-confirm', async function (req, res) {
 
     const eventId  = 'purchase_' + payment_intent;
     const billing  = pi.latest_charge?.billing_details;
-    const userData = { client_ip_address: req.ip, client_user_agent: req.get('user-agent') || '' };
+    const userData = baseUserData(req);
 
     if (billing?.email) userData.em = [sha256(billing.email)];
     if (billing?.name) {
