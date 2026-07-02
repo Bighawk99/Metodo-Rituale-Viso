@@ -13,24 +13,27 @@
 
   <script src="https://js.stripe.com/v3/" defer></script>
 
-  <!-- Meta Pixel: caricato sempre (rilevabile da Meta), dati inviati solo dopo consenso -->
+  <!-- Meta Pixel: caricato SOLO dopo consenso esplicito (GDPR).
+       NOTA: l'SDK Meta non invia eventi in modo affidabile se si chiama
+       fbq('consent','revoke') seguito da fbq('consent','grant') nella
+       stessa sessione (verificato: l'evento resta bloccato anche dopo
+       il grant). Per questo il pixel non viene proprio istanziato finché
+       il consenso non è confermato, invece di caricarlo sempre e provare
+       a "sbloccarlo" dinamicamente. -->
   <script>
-  !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-  n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
-  n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
-  t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
-  document,'script','https://connect.facebook.net/en_US/fbevents.js');
-  /* Revoca consenso di default (GDPR) — nessun dato inviato finché l'utente non accetta */
-  fbq('consent', 'revoke');
-  fbq('init', '%%META_PIXEL_ID%%');
-  /* Se consenso già dato in precedenza, attiva subito il tracking */
+  window.loadMetaPixel = function () {
+    if (window.fbq) return;
+    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+    n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+    document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '%%META_PIXEL_ID%%');
+    fbq('track', 'PageView');
+  };
+  /* Se consenso già dato in precedenza, carica subito il pixel */
   if (localStorage.getItem('cookie_consent') === 'yes') {
-    fbq('consent', 'grant');
-    fbq('track', 'PageView');
-  }
-  function initMetaPixel() {
-    fbq('consent', 'grant');
-    fbq('track', 'PageView');
+    window.loadMetaPixel();
   }
   </script>
   <noscript><img height="1" width="1" style="display:none"
@@ -2533,12 +2536,11 @@
   document.getElementById('cookieAccept').addEventListener('click', function () {
     localStorage.setItem('cookie_consent', 'yes');
     banner.style.display = 'none';
-    initMetaPixel();
+    window.loadMetaPixel();
   });
   document.getElementById('cookieDecline').addEventListener('click', function () {
     localStorage.setItem('cookie_consent', 'no');
     banner.style.display = 'none';
-    if (typeof fbq !== 'undefined') fbq('consent', 'revoke');
   });
 })();
 </script>
