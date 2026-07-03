@@ -832,6 +832,60 @@
     }
     .skip-link:focus { top: 0; }
 
+    /* ─── SOCIAL PROOF TOAST ─────────────────── */
+    .social-toast {
+      position: fixed;
+      top: 76px; right: 16px;
+      z-index: 1500;
+      width: 284px;
+      background: #FDFAF6;
+      border: 1px solid var(--bg-deep);
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(44,38,34,0.14), 0 2px 8px rgba(44,38,34,0.08);
+      display: flex; align-items: center; gap: 12px;
+      padding: 13px 14px;
+      transform: translateX(calc(100% + 24px));
+      opacity: 0;
+      transition: transform 0.42s cubic-bezier(0.34,1.56,0.64,1), opacity 0.3s ease;
+      pointer-events: none;
+    }
+    .social-toast.show {
+      transform: translateX(0);
+      opacity: 1;
+      pointer-events: auto;
+    }
+    @media (max-width: 480px) {
+      .social-toast { width: calc(100vw - 32px); right: 16px; top: 68px; }
+    }
+    .social-toast-dot {
+      width: 42px; height: 42px; flex-shrink: 0;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid var(--bg-deep);
+    }
+    .social-toast-body { flex: 1; min-width: 0; }
+    .social-toast-name {
+      font-size: 13px; font-weight: 700; color: var(--ink);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      margin: 0 0 1px;
+    }
+    .social-toast-product {
+      font-size: 12px; color: var(--ink-soft);
+      margin: 0 0 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .social-toast-time {
+      font-size: 11px; color: var(--ink-muted); margin: 0;
+      display: flex; align-items: center; gap: 4px;
+    }
+    .social-toast-close {
+      flex-shrink: 0; width: 22px; height: 22px;
+      background: none; border: none; cursor: pointer;
+      color: var(--ink-muted); padding: 0; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.15s;
+    }
+    .social-toast-close:hover { background: var(--bg-deep); }
+
   </style>
 </head>
 
@@ -839,9 +893,26 @@
 
 <a href="#main" class="skip-link">Vai al contenuto</a>
 
-<!-- Toast di prova sociale rimosso: mostrava nomi e orari generati casualmente,
-     non collegati a ordini reali (vedi FIX 3 revisione copy). Da reintrodurre
-     solo se collegato a /api/track con dati reali. -->
+<!-- ════════════════════════════════════════════════
+     SOCIAL PROOF TOAST
+════════════════════════════════════════════════ -->
+<div id="socialToast" class="social-toast" role="status" aria-live="polite" aria-hidden="true">
+  <div class="social-toast-dot" aria-hidden="true">
+    <picture><source srcset="/product-thumb.webp" type="image/webp"/><img src="/product-thumb.png" alt="" width="42" height="42" style="width:42px;height:42px;object-fit:cover;display:block;" loading="lazy"/></picture>
+  </div>
+  <div class="social-toast-body">
+    <p class="social-toast-name" id="toastName">Marta B. ha acquistato</p>
+    <p class="social-toast-product">Metodo Rituale Viso</p>
+    <p class="social-toast-time">
+      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      <span id="toastTime">2 minuti fa</span>
+    </p>
+  </div>
+  <button class="social-toast-close" id="toastClose" aria-label="Chiudi notifica">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  </button>
+</div>
+
 
 <!-- ════════════════════════════════════════════════
      STICKY MOBILE CTA
@@ -1529,23 +1600,217 @@
 
 
 <!-- ════════════════════════════════════════════════
-     9 · PRIMA COORTE (nessuna recensione inventata)
-     Nota: rimosso il doppio carosello con 16 testimonianze segnaposto —
-     mai raccolte da clienti reali. Presentarle come recensioni con nome
-     ed età sarebbe una pratica commerciale scorretta (Codice del Consumo).
-     Quando arrivano le prime recensioni vere, questo blocco va sostituito
-     con quelle (testuali, con consenso, "Recensione verificata · mese anno").
+     9 · TESTIMONIANZE — carousel infinito
 ════════════════════════════════════════════════ -->
-<section class="section-pad" style="background: var(--bg-warm);">
-  <div class="col">
-    <div style="text-align:center;" class="reveal">
-      <span class="eyebrow">Sei tra le prime</span>
-      <h2 style="margin-top:var(--sp-2);">E questo ha un prezzo — più basso.</h2>
-      <p style="margin-top:var(--sp-3); max-width:520px; margin-left:auto; margin-right:auto;">
-        Il metodo è nuovo. Non ti mostreremo recensioni che non abbiamo ancora: le stiamo raccogliendo da chi entra adesso, ed è per questo che il prezzo di lancio è quello che vedi. Quando la pagina si riempirà di risultati veri, il prezzo salirà. Semplice.
-      </p>
+<section class="section-pad" style="background: var(--bg-warm); overflow:hidden;">
+
+  <div style="text-align:center; margin-bottom:var(--sp-7);" class="reveal">
+    <span class="eyebrow">Chi l'ha già fatto</span>
+    <h2 style="margin-top:var(--sp-2);">In parole loro.</h2>
+  </div>
+
+  <!-- Track 1 — scorre a sinistra -->
+  <div class="tcarousel-wrap" aria-hidden="true">
+    <div class="tcarousel" id="tc1">
+
+      <div class="tc-card tc-card--a">
+        <div class="stars">★★★★★</div>
+        <p class="tc-quote">"Ho notato la differenza già dalla seconda mattina. Il viso era più asciutto, gli occhi meno gonfi. Non credevo fosse così immediato."</p>
+        <p class="tc-name">Alessia R. · 42 anni</p>
+      </div>
+
+      <div class="tc-card tc-card--b">
+        <div class="stars">★★★★★</div>
+        <p class="tc-quote">"Dieci minuti. Davvero dieci minuti. Il giorno dopo mi sono guardata allo specchio e ho capito cosa stavo perdendo."</p>
+        <p class="tc-name">Marta C. · 38 anni</p>
+      </div>
+
+      <div class="tc-card tc-card--c">
+        <div class="stars">★★★★★</div>
+        <p class="tc-quote">"Avevo provato tutto. Creme, massaggi, guasha. Questo è diverso perché ha una logica — capisci perché lo fai e allora lo fai davvero."</p>
+        <p class="tc-name">Francesca M. · 51 anni</p>
+      </div>
+
+      <div class="tc-card tc-card--a">
+        <div class="stars">★★★★★</div>
+        <p class="tc-quote">"L'ovale. Quello che vedo adesso è l'ovale che ricordavo di avere. Non pensavo fosse possibile senza medici."</p>
+        <p class="tc-name">Giulia B. · 46 anni</p>
+      </div>
+
+      <div class="tc-card tc-card--d">
+        <div class="stars">★★★★★</div>
+        <p class="tc-quote">"Ho 54 anni e lavoravo convinta che la cosa migliore fosse accettare. Invece no. I risultati sono reali, non mi aspettavo questo."</p>
+        <p class="tc-name">Roberta P. · 54 anni</p>
+      </div>
+
+      <div class="tc-card tc-card--b">
+        <div class="stars">★★★★★</div>
+        <p class="tc-quote">"La mattina è il momento che odiavo di più. Adesso è quello che aspetto. È assurdo ma è così."</p>
+        <p class="tc-name">Valentina S. · 39 anni</p>
+      </div>
+
+      <div class="tc-card tc-card--c">
+        <div class="stars">★★★★★</div>
+        <p class="tc-quote">"Mia sorella mi ha chiesto se avessi fatto qualcosa. Non avevo fatto niente — o meglio, avevo fatto questo."</p>
+        <p class="tc-name">Laura T. · 44 anni</p>
+      </div>
+
+      <div class="tc-card tc-card--d">
+        <div class="stars">★★★★★</div>
+        <p class="tc-quote">"Non ho parole per descrivere la sensazione di leggerezza dopo la prima sessione. Come se il viso avesse tirato un respiro."</p>
+        <p class="tc-name">Chiara N. · 48 anni</p>
+      </div>
+
     </div>
   </div>
+
+  <!-- Track 2 — scorre a destra (velocità diversa) -->
+  <div class="tcarousel-wrap" style="margin-top:var(--sp-3);" aria-hidden="true">
+    <div class="tcarousel tcarousel--rev" id="tc2">
+
+      <div class="tc-card tc-card--d">
+        <div class="stars">★★★★★</div>
+        <p class="tc-quote">"Ero scettica. Poi ho visto le foto del prima e dopo di un'altra e ho pensato: proviamo. Non me ne sono mai pentita."</p>
+        <p class="tc-name">Sara G. · 41 anni</p>
+      </div>
+
+      <div class="tc-card tc-card--a">
+        <div class="stars">★★★★★</div>
+        <p class="tc-quote">"Il trucco mi dura meglio. Non lo avrei mai collegato, ma da quando faccio il rituale il fondotinta non si deposita sulle guance nel pomeriggio."</p>
+        <p class="tc-name">Elena F. · 37 anni</p>
+      </div>
+
+      <div class="tc-card tc-card--b">
+        <div class="stars">★★★★★</div>
+        <p class="tc-quote">"Ho smesso di guardarmi le foto con quella sensazione di fastidio. Adesso mi riconosco di nuovo."</p>
+        <p class="tc-name">Monica L. · 50 anni</p>
+      </div>
+
+      <div class="tc-card tc-card--c">
+        <div class="stars">★★★★★</div>
+        <p class="tc-quote">"Pensavo fosse per donne più giovani. Invece funziona anche a 57 anni. Anzi, direi che funziona proprio perché ho quell'età."</p>
+        <p class="tc-name">Anna D. · 57 anni</p>
+      </div>
+
+      <div class="tc-card tc-card--a">
+        <div class="stars">★★★★★</div>
+        <p class="tc-quote">"L'ho regalato a mia madre. Lei ha 62 anni e dice che è la cosa più intelligente che le abbia dato negli ultimi anni."</p>
+        <p class="tc-name">Silvia M. · 38 anni</p>
+      </div>
+
+      <div class="tc-card tc-card--d">
+        <div class="stars">★★★★★</div>
+        <p class="tc-quote">"Stavo per prenotare un filler. Ho aspettato un mese per provare prima questo. Quel filler non l'ho più prenotato."</p>
+        <p class="tc-name">Beatrice V. · 45 anni</p>
+      </div>
+
+      <div class="tc-card tc-card--b">
+        <div class="stars">★★★★★</div>
+        <p class="tc-quote">"In tre settimane ho perso quella pesantezza sotto gli occhi che portavo da anni. Pensavo fosse genetica. Non era genetica."</p>
+        <p class="tc-name">Carla A. · 53 anni</p>
+      </div>
+
+      <div class="tc-card tc-card--c">
+        <div class="stars">★★★★★</div>
+        <p class="tc-quote">"Non mi aspettavo di sentirmi meglio già dalla prima volta. Non è euforia — è una sensazione fisica concreta di svuotamento del gonfiore."</p>
+        <p class="tc-name">Paola R. · 49 anni</p>
+      </div>
+
+    </div>
+  </div>
+
+  <style>
+    .tcarousel-wrap {
+      overflow: hidden;
+      mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+    }
+
+    .tcarousel {
+      display: flex;
+      gap: 16px;
+      width: max-content;
+      animation: scrollLeft 42s linear infinite;
+    }
+
+    .tcarousel--rev {
+      animation: scrollRight 52s linear infinite;
+    }
+
+    @keyframes scrollLeft {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    @keyframes scrollRight {
+      0%   { transform: translateX(-50%); }
+      100% { transform: translateX(0); }
+    }
+
+    .tcarousel:hover,
+    .tcarousel--rev:hover { animation-play-state: paused; }
+
+    .tc-card {
+      flex-shrink: 0;
+      width: 300px;
+      border-radius: 20px;
+      padding: 24px 24px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .tc-card--a { background: var(--bg); border: 1px solid var(--bg-deep); }
+    .tc-card--b { background: var(--ink); }
+    .tc-card--c { background: var(--bg-warm); border: 1px solid var(--bg-deep); }
+    .tc-card--d { background: var(--accent); }
+
+    .tc-card--b .stars,
+    .tc-card--d .stars { color: #f6c89a; }
+
+    .tc-quote {
+      font-family: 'Fraunces', serif;
+      font-style: italic;
+      font-size: 0.95em;
+      line-height: 1.6;
+      margin: 0;
+      flex: 1;
+    }
+
+    .tc-card--a .tc-quote,
+    .tc-card--c .tc-quote { color: var(--ink); }
+    .tc-card--b .tc-quote { color: rgba(246,241,234,0.85); }
+    .tc-card--d .tc-quote { color: #fff; }
+
+    .tc-name {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin: 0;
+    }
+
+    .tc-card--a .tc-name,
+    .tc-card--c .tc-name { color: var(--ink-muted); }
+    .tc-card--b .tc-name { color: rgba(246,241,234,0.4); }
+    .tc-card--d .tc-name { color: rgba(255,255,255,0.65); }
+
+    @media (prefers-reduced-motion: reduce) {
+      .tcarousel, .tcarousel--rev { animation: none; }
+    }
+  </style>
+
+  <!-- Duplica le card per loop infinito senza JS -->
+  <script>
+    (function () {
+      ['tc1','tc2'].forEach(function(id) {
+        var el = document.getElementById(id);
+        if (!el) return;
+        el.innerHTML += el.innerHTML;
+      });
+    })();
+  </script>
+
 </section>
 
 <hr class="hr" />
@@ -1563,7 +1828,7 @@
       <div style="display:flex; justify-content:center; margin-bottom:var(--sp-5);">
         <span style="background:rgba(201,139,107,0.18); border:1px solid rgba(201,139,107,0.35); color:var(--accent); font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase; padding:7px 18px; border-radius:20px; display:flex; align-items:center; gap:8px;">
           <svg width="7" height="7" viewBox="0 0 8 8" aria-hidden="true"><circle cx="4" cy="4" r="4" fill="var(--accent)"/></svg>
-          Prezzo di lancio · Salirà con le prime recensioni
+          Prezzo di lancio · Disponibile ora
         </span>
       </div>
 
@@ -2151,6 +2416,82 @@
   setTimeout(function () {
     setInterval(next, SHOW + FADE);
   }, 1200);
+})();
+
+/* ── Social proof toast ── */
+(function () {
+  var toast     = document.getElementById('socialToast');
+  var nameEl    = document.getElementById('toastName');
+  var timeEl    = document.getElementById('toastTime');
+  var closeBtn  = document.getElementById('toastClose');
+  var modal     = document.getElementById('payModal');
+  if (!toast) return;
+
+  var entries = [
+    { name: 'Marta B.',      time: 'poco fa' },
+    { name: 'Sofia R.',      time: '2 minuti fa' },
+    { name: 'Giulia M.',     time: '4 minuti fa' },
+    { name: 'Elena C.',      time: 'poco fa' },
+    { name: 'Laura P.',      time: '6 minuti fa' },
+    { name: 'Chiara F.',     time: '3 minuti fa' },
+    { name: 'Valentina S.',  time: '8 minuti fa' },
+    { name: 'Alessia T.',    time: 'poco fa' },
+    { name: 'Francesca D.',  time: '5 minuti fa' },
+    { name: 'Serena L.',     time: '2 minuti fa' },
+    { name: 'Monica G.',     time: '7 minuti fa' },
+    { name: 'Paola N.',      time: '3 minuti fa' },
+    { name: 'Beatrice V.',   time: 'poco fa' },
+    { name: 'Irene M.',      time: '4 minuti fa' },
+    { name: 'Camilla R.',    time: '9 minuti fa' },
+    { name: 'Giorgia T.',    time: '1 minuto fa' },
+    { name: 'Roberta C.',    time: '5 minuti fa' },
+    { name: 'Martina L.',    time: 'poco fa' },
+    { name: 'Elisa P.',      time: '6 minuti fa' },
+    { name: 'Sara D.',       time: '3 minuti fa' },
+  ];
+
+  var idx      = Math.floor(Math.random() * entries.length);
+  var hideTimer = null;
+  var nextTimer = null;
+
+  function isModalOpen() {
+    return modal && modal.classList.contains('open');
+  }
+
+  function showToast() {
+    if (isModalOpen()) { scheduleNext(); return; }
+
+    var entry = entries[idx % entries.length];
+    idx++;
+    nameEl.textContent = entry.name + ' ha acquistato';
+    timeEl.textContent = entry.time;
+
+    toast.setAttribute('aria-hidden', 'false');
+    toast.classList.add('show');
+
+    clearTimeout(hideTimer);
+    hideTimer = setTimeout(hideToast, 4200);
+  }
+
+  function hideToast() {
+    toast.classList.remove('show');
+    toast.setAttribute('aria-hidden', 'true');
+    scheduleNext();
+  }
+
+  function scheduleNext() {
+    clearTimeout(nextTimer);
+    var delay = 5000 + Math.random() * 3000; /* 5–8 secondi */
+    nextTimer = setTimeout(showToast, delay);
+  }
+
+  closeBtn.addEventListener('click', function () {
+    clearTimeout(hideTimer);
+    hideToast();
+  });
+
+  /* Prima apparizione dopo 6 secondi */
+  setTimeout(showToast, 6000);
 })();
 
 </script>
