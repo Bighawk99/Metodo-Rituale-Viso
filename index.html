@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Metodo Rituale Viso — Dieci minuti al giorno per un viso sgonfio e luminoso</title>
-  <meta name="description" content="Dieci minuti al giorno per un ovale più pulito, occhi meno gonfi e più luce. Il giorno dopo. Senza aghi." />
+  <title>Metodo Rituale Viso — Viso sgonfio in 10 minuti al giorno. Senza aghi.</title>
+  <meta name="description" content="Ovale più pulito, occhi meno gonfi, più luce. Il giorno dopo, non tra sei mesi. Auto-massaggio e drenaggio in 10 minuti — solo le tue mani. Garanzia 30 giorni." />
   <link rel="preload" as="image" href="hero.webp" type="image/webp"/>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -832,60 +832,6 @@
     }
     .skip-link:focus { top: 0; }
 
-    /* ─── SOCIAL PROOF TOAST ─────────────────── */
-    .social-toast {
-      position: fixed;
-      top: 76px; right: 16px;
-      z-index: 1500;
-      width: 284px;
-      background: #FDFAF6;
-      border: 1px solid var(--bg-deep);
-      border-radius: 16px;
-      box-shadow: 0 8px 32px rgba(44,38,34,0.14), 0 2px 8px rgba(44,38,34,0.08);
-      display: flex; align-items: center; gap: 12px;
-      padding: 13px 14px;
-      transform: translateX(calc(100% + 24px));
-      opacity: 0;
-      transition: transform 0.42s cubic-bezier(0.34,1.56,0.64,1), opacity 0.3s ease;
-      pointer-events: none;
-    }
-    .social-toast.show {
-      transform: translateX(0);
-      opacity: 1;
-      pointer-events: auto;
-    }
-    @media (max-width: 480px) {
-      .social-toast { width: calc(100vw - 32px); right: 16px; top: 68px; }
-    }
-    .social-toast-dot {
-      width: 42px; height: 42px; flex-shrink: 0;
-      border-radius: 10px;
-      overflow: hidden;
-      border: 1px solid var(--bg-deep);
-    }
-    .social-toast-body { flex: 1; min-width: 0; }
-    .social-toast-name {
-      font-size: 13px; font-weight: 700; color: var(--ink);
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-      margin: 0 0 1px;
-    }
-    .social-toast-product {
-      font-size: 12px; color: var(--ink-soft);
-      margin: 0 0 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-    }
-    .social-toast-time {
-      font-size: 11px; color: var(--ink-muted); margin: 0;
-      display: flex; align-items: center; gap: 4px;
-    }
-    .social-toast-close {
-      flex-shrink: 0; width: 22px; height: 22px;
-      background: none; border: none; cursor: pointer;
-      color: var(--ink-muted); padding: 0; border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      transition: background 0.15s;
-    }
-    .social-toast-close:hover { background: var(--bg-deep); }
-
   </style>
 </head>
 
@@ -893,25 +839,9 @@
 
 <a href="#main" class="skip-link">Vai al contenuto</a>
 
-<!-- ════════════════════════════════════════════════
-     SOCIAL PROOF TOAST
-════════════════════════════════════════════════ -->
-<div id="socialToast" class="social-toast" role="status" aria-live="polite" aria-hidden="true">
-  <div class="social-toast-dot" aria-hidden="true">
-    <picture><source srcset="/product-thumb.webp" type="image/webp"/><img src="/product-thumb.png" alt="" width="42" height="42" style="width:42px;height:42px;object-fit:cover;display:block;" loading="lazy"/></picture>
-  </div>
-  <div class="social-toast-body">
-    <p class="social-toast-name" id="toastName">Marta B. ha acquistato</p>
-    <p class="social-toast-product">Metodo Rituale Viso</p>
-    <p class="social-toast-time">
-      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-      <span id="toastTime">2 minuti fa</span>
-    </p>
-  </div>
-  <button class="social-toast-close" id="toastClose" aria-label="Chiudi notifica">
-    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-  </button>
-</div>
+<!-- Toast di prova sociale rimosso: mostrava nomi e orari generati casualmente,
+     non collegati a ordini reali (vedi FIX 3 revisione copy). Da reintrodurre
+     solo se collegato a /api/track con dati reali. -->
 
 <!-- ════════════════════════════════════════════════
      STICKY MOBILE CTA
@@ -921,24 +851,23 @@
   <!-- Badge row -->
   <div class="sticky-bar-badges">
     <div class="sticky-badge sticky-badge-social">
-      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-      +2.500 donne hanno iniziato
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+      Garanzia 30 giorni
     </div>
     <div class="sticky-badge sticky-badge-promo">
       <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-      Sconto del 78% attivo
+      Prezzo di lancio
     </div>
   </div>
 
   <!-- Price + CTA row -->
   <div class="sticky-cta-row">
     <div class="sticky-price-block">
-      <span class="sticky-price-old">39 €</span>
       <span class="sticky-price-new">%%PRICE_EUR%% €</span>
     </div>
     <button class="sticky-btn sticky-rock" data-modal="pay" tabindex="-1" aria-label="Inizia il percorso — %%PRICE_EUR%% euro">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-      Inizia il percorso
+      Inizia — %%PRICE_EUR%% €
     </button>
   </div>
 
@@ -978,12 +907,8 @@
 
     <!-- Prezzo -->
     <div class="pay-modal-price-box">
-      <div style="display:flex; align-items:center; gap:10px; margin-bottom:6px;">
-        <span style="font-size:13px; color:rgba(246,241,234,0.35); text-decoration:line-through;">179 €</span>
-        <span style="background:var(--accent); color:#fff; font-size:10px; font-weight:700; padding:3px 9px; border-radius:20px; letter-spacing:0.5px;">−78%</span>
-      </div>
       <div style="font-family:'Fraunces',serif; font-size:clamp(2.2rem,8vw,3rem); font-weight:700; color:var(--bg); line-height:1;">%%PRICE_EUR%% €</div>
-      <p style="font-size:12px; color:rgba(246,241,234,0.38); margin-top:5px;">Pagamento unico · Nessun abbonamento</p>
+      <p style="font-size:12px; color:rgba(246,241,234,0.38); margin-top:8px;">Pagamento unico · Nessun abbonamento · Prezzo di lancio</p>
     </div>
 
     <!-- Loading -->
@@ -1058,7 +983,7 @@
   </p>
   <div style="display:flex; justify-content:flex-end;">
     <a href="#offerta" data-modal="pay" class="btn btn-primary" style="padding:10px 24px; min-height:40px; font-size:13px; display:none;" id="headerCta">
-      Inizia il percorso →
+      Inizia — %%PRICE_EUR%% € →
     </a>
   </div>
 </header>
@@ -1074,7 +999,7 @@
   <div class="col" style="text-align:center; position:relative;">
 
     <span class="eyebrow reveal" style="margin-bottom: var(--sp-3);">
-      Facial wellness · Il metodo che funziona il giorno dopo
+      Facial wellness · Risultati che vedi il giorno dopo
     </span>
 
     <!-- Feature cards hero -->
@@ -1083,8 +1008,8 @@
       <div style="background:var(--bg-warm); border-radius:var(--radius); padding:var(--sp-3) var(--sp-5); border:1px solid var(--bg-deep); display:flex; align-items:center; gap:var(--sp-3);">
         <p style="font-family:'Fraunces',serif; font-size:2.2rem; font-weight:700; color:var(--accent); line-height:1; flex-shrink:0;">10'</p>
         <div style="text-align:left;">
-          <p style="font-weight:700; font-size:14px; color:var(--ink); margin-bottom:3px;">In soli 10 minuti al giorno</p>
-          <p style="font-size:12px; color:var(--ink-muted); margin:0; line-height:1.5;">Il rituale si adatta a qualsiasi mattina, anche quelle di fretta.</p>
+          <p style="font-weight:700; font-size:14px; color:var(--ink); margin-bottom:3px;">Anche nelle mattine di fretta</p>
+          <p style="font-size:12px; color:var(--ink-muted); margin:0; line-height:1.5;">C'è la versione da 60 secondi per i giorni impossibili.</p>
         </div>
       </div>
 
@@ -1108,18 +1033,21 @@
     <div class="accent-line accent-line-center reveal reveal-delay-2" style="margin-bottom: var(--sp-3);"></div>
 
     <h3 class="reveal reveal-delay-2" style="font-style:normal; color:var(--ink-soft); max-width:520px; margin:0 auto var(--sp-5); font-size:clamp(1rem, 2.2vw, 1.2rem); font-weight:400; line-height:1.65;">
-      Dieci minuti al giorno per un ovale più pulito, occhi meno pesanti e più luce sul viso.
-      Il giorno dopo — non tra sei mesi. Senza aghi, senza creme da 90&nbsp;€.
+      Dieci minuti al giorno, solo le tue mani. Ovale più pulito, occhi meno pesanti, più luce —
+      domattina, non tra sei mesi. Senza aghi. Senza creme da 90&nbsp;€. Senza abbonamenti.
     </h3>
 
     <div class="reveal reveal-delay-3" style="display:flex; gap:var(--sp-2); justify-content:center; flex-wrap:wrap;">
       <a href="#metodo" class="btn btn-accent btn-lg" id="heroCta">
-        Scopri il metodo →
+        Mostrami come funziona →
+      </a>
+      <a href="#offerta" class="btn" style="background:transparent; color:var(--ink); border:1.5px solid var(--bg-deep); padding:16px 34px; min-height:52px;">
+        Vai all'offerta ↓
       </a>
     </div>
 
     <p class="reveal reveal-delay-3" style="font-size:12px; color:var(--ink-muted); margin-top:var(--sp-2);">
-      Soddisfatta o rimborsata entro 30 giorni
+      Garanzia 30 giorni: soddisfatta o rimborsata. Senza domande.
     </p>
 
     <!-- Hero image -->
@@ -1151,14 +1079,16 @@
     <div class="section-header reveal">
       <span class="eyebrow">La scena che conosci già</span>
       <h2 style="margin-top: var(--sp-2);">
-        C'è uno specchio e un momento del giorno<br/>
-        in cui preferiresti non guardare.
+        C'è una foto in cui non ti sei riconosciuta.<br/>
+        Ricordi quale.
       </h2>
     </div>
 
     <div class="reveal reveal-delay-1">
-      <p>Non è la mattina presto — quello è comprensibile, lo siamo tutte. È quella foto al compleanno di tua figlia. O il riflesso nell'ascensore di un palazzo con luci troppo vere. Il momento in cui pensi: <em style="font-family:'Fraunces',serif; color:var(--ink);">"Ma quando è successo?"</em></p>
-      <p>Non sei cambiata nell'arco di anni. Sei cambiata in una foto. E quello che vedi non è solo stanchezza: è un viso che ha perso qualcosa di leggero, qualcosa di aperto. Il bordo dell'ovale è sceso un centimetro. Gli occhi sembrano più piccoli. Le guance tengono una pesantezza che non si scioglie dormendo.</p>
+      <p>Non lo specchio della mattina — quello perdona, lo sappiamo tutte.</p>
+      <p>È la foto al compleanno di tua figlia. Il riflesso nell'ascensore con quelle luci troppo oneste. Il video in cui qualcuno ti ha ripresa di lato.</p>
+      <p>E quel pensiero, preciso: <em style="font-family:'Fraunces',serif; color:var(--ink);">"Ma quando è successo?"</em></p>
+      <p>Ecco la cosa che nessuno ti dice: <strong>non è successo negli anni. È successo nei liquidi.</strong> Il bordo dell'ovale che sembra sceso. Gli occhi che sembrano più piccoli. Le guance che tengono una pesantezza che il sonno non scioglie più.</p>
     </div>
 
     <blockquote class="reveal reveal-delay-2">
@@ -1166,20 +1096,17 @@
     </blockquote>
 
     <div class="reveal reveal-delay-2">
-      <p>Questa frase la sento spesso. Ed è la frase più onesta che esista sul tema. Non è vanità. È il disagio specifico, adulto, di non sentirsi al passo con chi si sa di essere dentro.</p>
-      <p>Questo è il punto da cui parte tutto. Non da una lista di difetti. Da una sensazione vera.</p>
+      <p>Questa frase la sento ogni settimana. Ed è la più onesta che esista sul tema.</p>
+      <p>Non è vanità. È il disagio adulto, specifico, di un viso che non racconta più chi sei dentro.</p>
+      <p>Tutto parte da qui. Non da una lista di difetti. Da una sensazione vera — e da una causa che si può muovere.</p>
     </div>
 
     <!-- Intro casi studio — voce di Laila -->
     <div class="reveal reveal-delay-2" style="margin-top:var(--sp-6); margin-bottom:var(--sp-4);">
       <span class="eyebrow" style="margin-bottom:var(--sp-1);">Parola di Laila</span>
       <p class="f-serif" style="font-style:italic; font-size:clamp(1.05rem, 2.2vw, 1.25rem); color:var(--ink); line-height:1.65; margin-top:var(--sp-1);">
-        "Per anni mi sono svegliata la mattina, mi guardavo allo specchio e non mi riconoscevo.<br/>
-        Non era stanchezza. Era qualcosa di più sottile — sentivo che il mio viso non rispecchiava<br class="desk-only"/> come mi sentivo dentro.<br/><br/>
-        Ho iniziato a studiare, a cercare, a sperimentare su me stessa.<br/>
-        Non cercavo un miracolo. Cercavo qualcosa di <em>vero</em> e di mio.<br/><br/>
-        Quello che vedi qui sotto sono le persone a cui ho insegnato questo metodo per la prima volta.<br/>
-        Nessun filtro. Nessuna luce studiata. Solo la mattina prima e la mattina dopo."
+        "Quelle che vedi qui sotto sono donne vere a cui ho insegnato il metodo.<br/>
+        Nessun filtro, nessuna luce studiata: la mattina prima e la mattina dopo,<br class="desk-only"/> stesso telefono, stessa finestra."
       </p>
     </div>
 
@@ -1191,7 +1118,7 @@
           <source srcset="prima.webp" type="image/webp"/>
           <img src="prima.png" alt="Prima — viso gonfio e stanco" style="width:100%; height:420px; object-fit:cover; object-position:center top; border-radius:var(--radius); display:block;" loading="lazy"/>
         </picture>
-        <p style="font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--ink-muted); margin-top:10px; text-align:center;">Prima</p>
+        <p style="font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--ink-muted); margin-top:10px; text-align:center;">Mattina 1 — prima del rituale</p>
       </div>
 
       <div>
@@ -1199,7 +1126,7 @@
           <source srcset="dopo.webp" type="image/webp"/>
           <img src="dopo.png" alt="Dopo — ovale più pulito e luminoso" style="width:100%; height:420px; object-fit:cover; object-position:center top; border-radius:var(--radius); display:block;" loading="lazy"/>
         </picture>
-        <p style="font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--accent); margin-top:10px; text-align:center;">Dopo</p>
+        <p style="font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--accent); margin-top:10px; text-align:center;">Mattina 2 — dopo la prima sessione</p>
       </div>
 
     </div>
@@ -1218,22 +1145,22 @@
 
     <div class="section-header reveal">
       <span class="eyebrow">Il vicolo cieco</span>
-      <h2 style="margin-top: var(--sp-2);">Prima di farti bucare,<br/>considera una cosa.</h2>
+      <h2 style="margin-top: var(--sp-2);">Prima di farti bucare,<br/>leggi questi tre paragrafi.</h2>
     </div>
 
     <div class="reveal reveal-delay-1">
-      <p>Arrivi a un certo punto in cui ci pensi davvero. Un'iniezione. Un filler. Qualcosa che "sistemi" la situazione. Non perché tu voglia cambiare faccia — ma perché vuoi ritrovare quella sensazione di leggerezza che ricordi.</p>
-      <p>E poi ti blocchi. Perché la paura vera non è il dolore. È quella domanda silenziosa: <em style="font-family:'Fraunces',serif; color:var(--ink);">e se poi non mi riconosco più?</em> L'hai vista sulle facce di qualcun'altra. Quel qualcosa di spento, quel viso che sembra appartenerle meno di prima.</p>
-      <p>Il settore beauty ci ha convinte che l'unica risposta seria fosse l'ago o la crema da novanta euro. Da un lato il bisturi, dall'altro una promessa in un barattolo. Tra i due, un vuoto enorme — e nessuna che ti spiegasse cosa succede davvero sotto la superficie del viso quando smetti di occupartene.</p>
+      <p>A un certo punto ci pensi davvero. Un'iniezione. Un filler. Qualcosa che "sistemi".</p>
+      <p>Non perché vuoi cambiare faccia — perché vuoi ritrovare la leggerezza che ricordi. Ed è qui che ti blocchi. Perché la paura vera non è l'ago. È la domanda silenziosa: <em style="font-family:'Fraunces',serif; color:var(--ink);">"E se poi non mi riconosco più?"</em> L'hai già vista, quella cosa, sul viso di qualcun'altra. Quel qualcosa di spento. Quel viso che sembra suo un po' meno di prima.</p>
+      <p>Il settore beauty ti ha lasciato due sole opzioni: il bisturi da una parte, una promessa in barattolo da 90 € dall'altra. In mezzo, un vuoto enorme — e nessuno che ti spiegasse <strong>cosa succede davvero sotto la superficie del viso quando smette di muoversi.</strong></p>
     </div>
 
     <blockquote class="reveal reveal-delay-2">
-      Il marketing della paura funziona così: ti fa sentire rotta, poi ti vende il pezzo di ricambio.<br/>
-      Noi partiamo dall'opposto.
+      Il marketing della paura funziona così: prima ti convince che sei rotta, poi ti vende il pezzo di ricambio.<br/>
+      Noi partiamo dall'esatto opposto.
     </blockquote>
 
     <p class="reveal reveal-delay-2" style="font-weight:600; color:var(--ink); font-size:var(--text-md);">
-      Il tuo viso non è rotto. Non ha bisogno di essere "sistemato". Ha bisogno di muoversi.
+      Il tuo viso non è rotto. Non va "sistemato". Va rimesso in movimento.
     </p>
 
   </div>
@@ -1249,32 +1176,33 @@
   <div class="col">
 
     <div class="section-header reveal">
-      <span class="eyebrow">L'intuizione che cambia tutto</span>
+      <span class="eyebrow">Quello che nessuno ti aveva spiegato</span>
       <h2 style="margin-top: var(--sp-2);">
-        Gran parte di quello che chiamiamo invecchiamento
+        Gran parte di ciò che chiami "invecchiamento"
         <em style="color:var(--accent);"> non è scritto nelle ossa.</em>
       </h2>
     </div>
 
-    <p class="reveal reveal-delay-1" style="font-size:var(--text-xl); font-family:'Fraunces',serif; font-style:italic; color:var(--ink); margin-bottom:var(--sp-4);">È ristagno.</p>
+    <p class="reveal reveal-delay-1" style="font-size:var(--text-xl); font-family:'Fraunces',serif; font-style:italic; color:var(--ink); margin-bottom:var(--sp-4);">È ristagno. E il ristagno si muove.</p>
 
     <div class="reveal reveal-delay-1">
-      <p>Linfa ferma che non scorre. Tensione accumulata nei muscoli del viso — quelli che stringi quando sei stressata, concentrata, davanti allo schermo per ore. Fluidi che non drenano e si depositano dove meno lo vogliamo: sotto gli occhi, lungo le guance, lungo il bordo della mandibola.</p>
-      <p>Il risultato? Un viso che appare pesante, spento, "ceduto". Non perché le ossa siano cambiate. Non perché la pelle abbia ceduto in modo irreversibile. Ma perché il sistema linfatico e muscolare del viso è rimasto fermo, anno dopo anno, senza che nessuno ci insegnasse ad attivarlo.</p>
+      <p>Linfa ferma che non scorre. Tensione accumulata nella mascella, nella fronte, tra le sopracciglia — i muscoli che stringi da anni davanti a uno schermo senza accorgertene. Fluidi che non drenano e si depositano esattamente dove non li vuoi: sotto gli occhi, lungo le guance, sul bordo della mandibola.</p>
+      <p>Risultato: un viso che appare pesante, spento, "ceduto". Non perché le ossa siano cambiate. Perché <strong>il sistema linfatico del viso è rimasto fermo, anno dopo anno, e nessuno ti ha mai insegnato ad attivarlo.</strong></p>
     </div>
 
     <!-- Callout -->
     <div class="callout reveal reveal-delay-2" style="margin: var(--sp-5) 0;">
       <p style="font-family:'Fraunces',serif; font-style:italic; font-size:1.2em; line-height:1.55; color:var(--ink); margin:0;">
         "Il gonfiore è fluido. Il fluido si muove.<br/>
-        Roba che si muove si può sgonfiare —<br/>
-        e si può farlo in dieci minuti."
+        E ciò che si muove, si drena —<br/>
+        in dieci minuti, con le mani che hai già."
       </p>
     </div>
 
     <div class="reveal reveal-delay-2">
-      <p>Non è magia. È fisiologia elementare che il settore beauty ha avuto interesse a ignorare, perché non si vende in un barattolo. Si impara, si pratica, si sente il giorno dopo.</p>
-      <p style="font-weight:600; color:var(--ink);">Questa è la base del percorso <strong>Metodo Rituale Viso</strong>.</p>
+      <p>Non è magia, e non te la venderemo come tale. È fisiologia elementare — la stessa che il settore ha convenientemente ignorato, perché non si imbottiglia e non si inietta.</p>
+      <p>Si impara una volta. Si pratica dieci minuti. Si vede il giorno dopo.</p>
+      <p style="font-weight:600; color:var(--ink);">Questa è la base del <strong>Metodo Rituale Viso</strong>.</p>
     </div>
 
   </div>
@@ -1294,9 +1222,9 @@
       <h2 style="margin-top:var(--sp-2);">Metodo Rituale Viso</h2>
       <div class="accent-line accent-line-center" style="margin-top:var(--sp-3);"></div>
       <p style="margin-top:var(--sp-3); max-width:560px; margin-left:auto; margin-right:auto;">
-        Una guida PDF da 44 pagine: auto-massaggio e drenaggio del viso con le sole mani,
-        in dieci minuti al giorno. Niente aghi, niente attrezzatura, niente abbonamento.
-        Un metodo che capisci prima ancora di iniziare — e che senti il giorno dopo.
+        La guida completa in PDF — 44 pagine: auto-massaggio e drenaggio del viso con le sole mani,
+        dieci minuti al giorno. Niente aghi, niente attrezzi, niente abbonamento.
+        Capisci il perché prima ancora di iniziare. Lo senti il giorno dopo.
       </p>
     </div>
 
@@ -1358,17 +1286,17 @@
         <div style="text-align:center; padding: var(--sp-4) var(--sp-3); background:var(--bg); border-radius:var(--radius); border:1px solid var(--bg-deep);">
           <p style="font-family:'Fraunces',serif; font-size:2rem; font-weight:700; color:var(--accent); line-height:1; margin-bottom:10px;">1</p>
           <p style="font-weight:700; font-size:14px; color:var(--ink); margin-bottom:6px;">Drena</p>
-          <p style="font-size:13px; color:var(--ink-soft); margin:0;">Il fluido si muove. Il gonfiore si alleggerisce.</p>
+          <p style="font-size:13px; color:var(--ink-soft); margin:0;">I fluidi fermi si muovono. Il gonfiore scende.</p>
         </div>
         <div style="text-align:center; padding: var(--sp-4) var(--sp-3); background:var(--bg); border-radius:var(--radius); border:1px solid var(--bg-deep);">
           <p style="font-family:'Fraunces',serif; font-size:2rem; font-weight:700; color:var(--accent); line-height:1; margin-bottom:10px;">2</p>
           <p style="font-weight:700; font-size:14px; color:var(--ink); margin-bottom:6px;">Scioglie</p>
-          <p style="font-size:13px; color:var(--ink-soft); margin:0;">La tensione muscolare cede. L'ovale si libera.</p>
+          <p style="font-size:13px; color:var(--ink-soft); margin:0;">La tensione della mascella cede. L'ovale si libera.</p>
         </div>
         <div style="text-align:center; padding: var(--sp-4) var(--sp-3); background:var(--bg); border-radius:var(--radius); border:1px solid var(--bg-deep);">
           <p style="font-family:'Fraunces',serif; font-size:2rem; font-weight:700; color:var(--accent); line-height:1; margin-bottom:10px;">3</p>
           <p style="font-weight:700; font-size:14px; color:var(--ink); margin-bottom:6px;">Riattiva</p>
-          <p style="font-size:13px; color:var(--ink-soft); margin:0;">La circolazione torna. La luce ricompare.</p>
+          <p style="font-size:13px; color:var(--ink-soft); margin:0;">Il microcircolo riparte. La luce torna.</p>
         </div>
       </div>
     </div>
@@ -1380,48 +1308,48 @@
       <div class="step-card reveal reveal-delay-1">
         <div class="step-num" aria-hidden="true">1</div>
         <div>
-          <p style="font-weight:700; font-size:15px; color:var(--ink); margin-bottom:4px;">PDF da 44 pagine — scaricabile subito</p>
-          <p style="font-size:13px; color:var(--ink-muted); margin:0;">Il percorso completo, sempre con te. Apri dal telefono la mattina, segui il rituale, chiudi. Nessuna piattaforma da caricare, nessun login ogni volta — è tuo a vita dal momento dell'acquisto.</p>
+          <p style="font-weight:700; font-size:15px; color:var(--ink); margin-bottom:4px;">Il PDF completo — tuo in 60 secondi</p>
+          <p style="font-size:13px; color:var(--ink-muted); margin:0;">44 pagine, scaricato subito sul telefono. Lo apri la mattina, segui, chiudi. Nessuna piattaforma, nessun login, nessuna scadenza: è tuo per sempre.</p>
         </div>
       </div>
 
       <div class="step-card reveal reveal-delay-2">
         <div class="step-num" aria-hidden="true">2</div>
         <div>
-          <p style="font-weight:700; font-size:15px; color:var(--ink); margin-bottom:4px;">La base che ti fa capire il perché</p>
-          <p style="font-size:13px; color:var(--ink-muted); margin:0;">Anatomia essenziale in cinque minuti: come funzionano linfa, muscoli e fascia del viso. E un patto di onestà su cosa cambia subito, cosa con il tempo, e cosa nessun massaggio può fare.</p>
+          <p style="font-weight:700; font-size:15px; color:var(--ink); margin-bottom:4px;">Il "perché" in 5 minuti</p>
+          <p style="font-size:13px; color:var(--ink-muted); margin:0;">L'anatomia essenziale di linfa, muscoli e fascia — spiegata come te la spiegherebbe un'amica che ne sa. E un patto di onestà: cosa cambia domattina, cosa cambia in 4 settimane, cosa nessun massaggio al mondo può fare.</p>
         </div>
       </div>
 
       <div class="step-card reveal reveal-delay-3">
         <div class="step-num" aria-hidden="true">3</div>
         <div>
-          <p style="font-weight:700; font-size:15px; color:var(--ink); margin-bottom:4px;">6 aree del viso con diagrammi e movimenti numerati</p>
-          <p style="font-size:13px; color:var(--ink-muted); margin:0;">Collo & clavicole · Ovale & mandibola · Guance & zigomi · Contorno occhi · Fronte & sopracciglia · Bocca & naso-labiale. Per ogni area: il disegno con i movimenti sul viso, il perché, i passi con tempo, ripetizioni, pressione e gli errori da evitare.</p>
+          <p style="font-weight:700; font-size:15px; color:var(--ink); margin-bottom:4px;">6 aree, movimenti numerati, zero ambiguità</p>
+          <p style="font-size:13px; color:var(--ink-muted); margin:0;">Collo & clavicole · Ovale & mandibola · Guance & zigomi · Contorno occhi · Fronte & sopracciglia · Bocca & naso-labiale. Per ognuna: il diagramma, la direzione, la pressione, i secondi, le ripetizioni — e gli errori che annullano l'effetto.</p>
         </div>
       </div>
 
       <div class="step-card reveal reveal-delay-3">
         <div class="step-num" aria-hidden="true">4</div>
         <div>
-          <p style="font-weight:700; font-size:15px; color:var(--ink); margin-bottom:4px;">Il rituale da 10 minuti + la versione express da 60 secondi</p>
-          <p style="font-size:13px; color:var(--ink-muted); margin:0;">Il rituale completo da fare ogni giorno, minuto per minuto. Più una versione da 60 secondi da usare quando il tempo è poco — ma vuoi comunque fare qualcosa.</p>
+          <p style="font-weight:700; font-size:15px; color:var(--ink); margin-bottom:4px;">Il rituale da 10 minuti + la versione da 60 secondi</p>
+          <p style="font-size:13px; color:var(--ink-muted); margin:0;">Minuto per minuto, senza doverti inventare niente. E quando il tempo non c'è, la sequenza da 60 secondi: perché un giorno imperfetto è meglio di un giorno saltato.</p>
         </div>
       </div>
 
       <div class="step-card reveal reveal-delay-3">
         <div class="step-num" aria-hidden="true" style="color:var(--ink-muted); border-color:var(--bg-deep);">+</div>
         <div>
-          <p style="font-weight:700; font-size:15px; color:var(--ink); margin-bottom:4px;">Programma di 4 settimane + diario fotografico</p>
-          <p style="font-size:13px; color:var(--ink-muted); margin:0;">Una progressione settimana per settimana già pronta. Con spazio per le foto e l'auto-valutazione — per vedere il cambiamento nel tempo senza affidarti solo alla memoria.</p>
+          <p style="font-weight:700; font-size:15px; color:var(--ink); margin-bottom:4px;">Programma 4 settimane + diario fotografico</p>
+          <p style="font-size:13px; color:var(--ink-muted); margin:0;">La progressione già pronta, settimana per settimana. Con lo spazio per le tue foto: perché la memoria mente, le foto no.</p>
         </div>
       </div>
 
     </div>
 
     <div style="text-align:center;" class="reveal">
-      <a href="#offerta" class="btn btn-accent btn-lg">Inizia il percorso →</a>
-      <p style="font-size:12px; color:var(--ink-muted); margin-top:var(--sp-2);">Soddisfatta o rimborsata entro 30 giorni · Accesso immediato</p>
+      <a href="#offerta" class="btn btn-accent btn-lg">Inizia il percorso — %%PRICE_EUR%% € →</a>
+      <p style="font-size:12px; color:var(--ink-muted); margin-top:var(--sp-2);">Accesso immediato · Garanzia 30 giorni, rimborso senza domande</p>
     </div>
 
   </div>
@@ -1437,24 +1365,24 @@
   <div class="col">
 
     <div class="section-header reveal">
-      <span class="eyebrow">Cosa succede il giorno dopo</span>
-      <h2 style="margin-top:var(--sp-2);">Il giorno dopo,<br/>non tra sei mesi.</h2>
+      <span class="eyebrow">Cosa succede domattina</span>
+      <h2 style="margin-top:var(--sp-2);">Il giorno dopo.<br/>Non tra sei mesi.</h2>
     </div>
 
     <div class="reveal reveal-delay-1">
-      <p>La prima cosa che noti, il mattino seguente alla prima sessione, è che il viso è più pulito ai bordi. L'ovale sembra leggermente più definito. Gli occhi meno gonfi di come li trovi di solito al risveglio. Una sensazione di leggerezza che di solito non c'è alle sette di mattina.</p>
-      <p>Questo non è promessa — è fisiologia. Hai attivato il drenaggio linfatico del viso. Il fluido si è mosso durante la notte. La differenza si vede perché c'è davvero.</p>
+      <p>La prima cosa che noti, il mattino dopo la prima sessione: i bordi del viso sono più puliti. L'ovale leggermente più definito. Gli occhi meno gonfi di come li trovi di solito alle sette.</p>
+      <p>Non è suggestione, e non è una promessa da barattolo: <strong>hai attivato il drenaggio linfatico, il fluido si è mosso durante la notte.</strong> La differenza si vede perché c'è.</p>
     </div>
 
     <!-- Honesty callout -->
     <div class="callout reveal reveal-delay-2" style="margin: var(--sp-5) 0;">
       <p class="eyebrow" style="margin-bottom:var(--sp-1); font-size:10px;">Una cosa onesta da dirti</p>
       <p style="font-size:15px; line-height:1.75; color:var(--ink-soft); margin:0;">
-        Lo sgonfiamento si vede il giorno dopo. Non è permanente da subito — è come allenare qualsiasi altro distretto del corpo. Più lo fai, più i tessuti "imparano" a restare drenati, e l'effetto si stabilizza nel tempo. Il rituale giornaliero serve esattamente a questo: non a "fare effetto", ma a mantenere e costruire. Le prime sessioni ti convincono. La costanza cambia le cose in modo duraturo.
+        Lo sgonfiamento del giorno dopo non è permanente da subito. Funziona come l'allenamento di qualsiasi parte del corpo: più lo fai, più i tessuti restano drenati, più l'effetto si stabilizza. Le prime sessioni ti convincono. La costanza consolida. Il rituale esiste esattamente per questo — e te lo diciamo prima che tu paghi, non dopo.
       </p>
     </div>
 
-    <p class="reveal reveal-delay-2" style="font-weight:600; color:var(--ink);">Nessun miracolo. Nessuna promessa in barattolo. Solo un viso che si muove e mostra quello che è già.</p>
+    <p class="reveal reveal-delay-2" style="font-weight:600; color:var(--ink);">Nessun miracolo. Nessun barattolo. Un viso che ricomincia a muoversi — e mostra quello che è già.</p>
 
   </div>
 </section>
@@ -1470,7 +1398,7 @@
 
     <div style="text-align:center; margin-bottom:var(--sp-7);" class="reveal">
       <span class="eyebrow">Fai il punto</span>
-      <h2 style="margin-top:var(--sp-2);">Questo percorso è per te?</h2>
+      <h2 style="margin-top:var(--sp-2);">Questo percorso è per te?<br/>Rispondiamo senza venderti fumo.</h2>
     </div>
 
     <div class="grid-2">
@@ -1478,28 +1406,28 @@
       <div class="card card-warm reveal reveal-delay-1" style="background:var(--bg);">
         <p style="font-weight:700; font-size:13px; color:var(--ink); letter-spacing:0.5px; margin-bottom:var(--sp-3); text-transform:uppercase;">È per te se…</p>
         <ul class="icon-list">
-          <li><span class="icon-badge badge-yes" aria-label="sì">✓</span><span>Hai dai 35 anni in su e noti che il viso è cambiato — più pesante, meno luminoso — ma non vuoi intervenire con aghi.</span></li>
-          <li><span class="icon-badge badge-yes" aria-label="sì">✓</span><span>Cerchi qualcosa che funzioni in dieci minuti reali, non in un'ora che non trovi mai.</span></li>
-          <li><span class="icon-badge badge-yes" aria-label="sì">✓</span><span>Vuoi capire cosa fai, non solo seguire passi ciecamente — il metodo ti verrà spiegato.</span></li>
-          <li><span class="icon-badge badge-yes" aria-label="sì">✓</span><span>Sei disposta a essere costante: non alla perfezione, ma abbastanza da costruire un'abitudine.</span></li>
-          <li><span class="icon-badge badge-yes" aria-label="sì">✓</span><span>Vuoi un risultato che senti anche alle 19:00, non solo alle 7:00 dopo un bel sonno.</span></li>
+          <li><span class="icon-badge badge-yes" aria-label="sì">✓</span><span>Hai 35+ anni e il viso che vedi nelle foto non ti somiglia più — ma l'ago non è la tua strada.</span></li>
+          <li><span class="icon-badge badge-yes" aria-label="sì">✓</span><span>Vuoi dieci minuti veri, non "l'ora al giorno" che non troverai mai.</span></li>
+          <li><span class="icon-badge badge-yes" aria-label="sì">✓</span><span>Vuoi capire cosa stai facendo e perché — non eseguire alla cieca.</span></li>
+          <li><span class="icon-badge badge-yes" aria-label="sì">✓</span><span>Sei disposta a essere costante. Non perfetta: costante.</span></li>
+          <li><span class="icon-badge badge-yes" aria-label="sì">✓</span><span>Vuoi un viso che regge alle 19:00, non solo alle 7:00 dopo una bella dormita.</span></li>
         </ul>
       </div>
 
       <div class="card card-warm reveal reveal-delay-2" style="background:var(--bg);">
         <p style="font-weight:700; font-size:13px; color:var(--ink); letter-spacing:0.5px; margin-bottom:var(--sp-3); text-transform:uppercase;">Non è per te se…</p>
         <ul class="icon-list">
-          <li><span class="icon-badge badge-no" aria-label="no">✕</span><span>Cerchi una soluzione una volta e basta, senza mai più pensarci — quello è il territorio della medicina estetica, non questo.</span></li>
-          <li><span class="icon-badge badge-no" aria-label="no">✕</span><span>Vuoi una promessa di trasformazione radicale in tempi cortissimi.</span></li>
-          <li><span class="icon-badge badge-no" aria-label="no">✕</span><span>Hai una condizione dermatologica o post-operatoria attiva — in quel caso parla prima col tuo medico.</span></li>
-          <li><span class="icon-badge badge-no" aria-label="no">✕</span><span>Non sei disposta a dedicarci neanche dieci minuti: funziona solo se lo fai.</span></li>
+          <li><span class="icon-badge badge-no" aria-label="no">✕</span><span>Cerchi la soluzione una-volta-e-basta: quello è il territorio della medicina estetica, e questa pagina non te lo venderà.</span></li>
+          <li><span class="icon-badge badge-no" aria-label="no">✕</span><span>Ti aspetti una trasformazione radicale in giorni. Qui il "giorno dopo" è vero, ma è sgonfiamento — non un lifting.</span></li>
+          <li><span class="icon-badge badge-no" aria-label="no">✕</span><span>Hai una condizione dermatologica o post-operatoria in corso: prima parla con il tuo medico.</span></li>
+          <li><span class="icon-badge badge-no" aria-label="no">✕</span><span>Non hai dieci minuti da mettere sul piatto. Funziona solo se lo fai.</span></li>
         </ul>
       </div>
 
     </div>
 
     <p style="text-align:center; font-size:13px; color:var(--ink-muted); margin-top:var(--sp-4); font-style:italic;" class="reveal reveal-delay-3">
-      Se ti sei ritrovata nella prima colonna più che nella seconda, sei nel posto giusto.
+      Se ti sei riconosciuta più nella prima colonna, continua a leggere: la parte migliore arriva adesso.
     </p>
 
   </div>
@@ -1516,7 +1444,7 @@
 
     <div class="section-header reveal">
       <span class="eyebrow">Le domande vere</span>
-      <h2 style="margin-top:var(--sp-2);">Le risposte che meriti,<br/>senza giri di parole.</h2>
+      <h2 style="margin-top:var(--sp-2);">Le obiezioni che hai in testa adesso.<br/>Una per una.</h2>
     </div>
 
     <div id="faqList" class="reveal reveal-delay-1">
@@ -1524,13 +1452,13 @@
       <!-- FAQ 1 -->
       <div class="faq-item">
         <button class="faq-trigger" aria-expanded="false">
-          <span>"Non ho tempo — dieci minuti sono pochi ma comunque non li trovo."</span>
+          <span>"Dieci minuti sono pochi, ma io non trovo nemmeno quelli."</span>
           <span class="faq-icon" aria-hidden="true">+</span>
         </button>
         <div class="faq-body" role="region">
           <div class="faq-body-inner">
-            <p>Dieci minuti sono meno di quanto ci vuole a scorrere il telefono prima di dormire. Non è una questione di tempo — è una questione di dove metti quei dieci minuti.</p>
-            <p>Il percorso è strutturato per funzionare di mattina appena sveglia, prima di fare qualsiasi altra cosa. È uno dei momenti in cui il drenaggio linfatico è più efficace — e il viso che ottieni per la giornata ti dura di più. Una volta che provi l'effetto, trovare dieci minuti non è più un problema.</p>
+            <p>Dieci minuti sono meno dello scroll a letto prima di dormire. La domanda non è se li hai — è dove li stai mettendo.</p>
+            <p>Il rituale è pensato per la mattina appena sveglia, quando il drenaggio rende di più e il risultato ti dura tutta la giornata. E c'è la versione da 60 secondi per i giorni impossibili. Dopo che vedi l'effetto la prima volta, i dieci minuti smettono di essere un problema: diventano il pezzo di mattina che difendi.</p>
           </div>
         </div>
       </div>
@@ -1543,8 +1471,8 @@
         </button>
         <div class="faq-body" role="region">
           <div class="faq-body-inner">
-            <p>Sì — ed è uno dei contesti in cui funziona meglio. A partire dai 45-50 anni, la circolazione linfatica del viso rallenta in modo più marcato e i fluidi ristagnano più facilmente. Questo significa che c'è più "margine di manovra": più gonfiore da sciogliere, più luce da recuperare.</p>
-            <p>Il rituale non ha controindicazioni legate all'età. La struttura del percorso è pensata proprio per chi parte da un punto in cui la differenza è già visibile — e la sente ancora di più.</p>
+            <p>Sì — ed è il contesto in cui la differenza si nota di più. Dopo i 45-50 la circolazione linfatica del viso rallenta in modo più marcato: c'è più ristagno accumulato, quindi più gonfiore da sciogliere e più luce da recuperare.</p>
+            <p>Il rituale non ha controindicazioni legate all'età. Se parti da un punto in cui la pesantezza è già visibile, sei esattamente la persona per cui è stato scritto.</p>
           </div>
         </div>
       </div>
@@ -1552,13 +1480,13 @@
       <!-- FAQ 3 -->
       <div class="faq-item">
         <button class="faq-trigger" aria-expanded="false">
-          <span>"E se non sono costante? Ho già iniziato mille cose e smesso."</span>
+          <span>"Ho iniziato mille cose e le ho mollate tutte."</span>
           <span class="faq-icon" aria-hidden="true">+</span>
         </button>
         <div class="faq-body" role="region">
           <div class="faq-body-inner">
-            <p>La difficoltà con la costanza, il più delle volte, non è la pigrizia. È che non vedi risultati abbastanza presto da voler continuare.</p>
-            <p>Qui il primo risultato lo vedi il giorno dopo la prima sessione. Non tra sei settimane. Il ciclo di rinforzo è immediato: fai, senti la differenza, hai un motivo per rifarlo. Non ti chiediamo la perfezione — ti chiediamo di fare. Il calendario del percorso ha un ritmo pensato per costruire l'abitudine senza sentirti in colpa quando salti un giorno.</p>
+            <p>Le hai mollate perché i risultati arrivavano troppo tardi per darti un motivo di continuare. Non è pigrizia: è un ciclo di rinforzo rotto.</p>
+            <p>Qui il primo risultato lo vedi domattina. Fai → vedi → hai un motivo per rifarlo. E il programma di 4 settimane è costruito per assorbire i giorni saltati senza farti sentire in colpa: ti chiediamo di fare, non di essere perfetta.</p>
           </div>
         </div>
       </div>
@@ -1571,9 +1499,9 @@
         </button>
         <div class="faq-body" role="region">
           <div class="faq-body-inner">
-            <p>Il filler è una scelta legittima — non siamo qui a giudicarla. Ma risponde a una domanda diversa.</p>
-            <p>Un filler riempie un volume. Non drena, non scioglie la tensione muscolare, non riattiva la circolazione. Se il tuo problema principale è il gonfiore e la pesantezza — non la perdita di volume — un filler risolve metà del problema e può addirittura peggiorare l'aspetto gonfiato nel tempo.</p>
-            <p>La domanda giusta da farti è: <em>cosa sto davvero vedendo quando mi guardo?</em> Se è stanchezza, pesantezza, mancanza di luce — prova prima questo. Hai trent'anni davanti per decidere se vuoi aggiungere altro.</p>
+            <p>Il filler è una scelta legittima e non siamo qui a demonizzarla. Ma risponde a un problema diverso: <strong>riempie un volume.</strong> Non drena, non scioglie tensione, non riattiva il microcircolo.</p>
+            <p>Se quello che vedi allo specchio è pesantezza, gonfiore, mancanza di luce — il filler risolve il problema sbagliato. E su un viso gonfio, aggiungere volume può perfino accentuare l'effetto.</p>
+            <p>Prova prima questo: costa una frazione, non buca niente, e domattina sai già se era la strada giusta. Il filler resta lì. Non scappa.</p>
           </div>
         </div>
       </div>
@@ -1581,13 +1509,13 @@
       <!-- FAQ 5 -->
       <div class="faq-item" style="border-bottom: none;">
         <button class="faq-trigger" aria-expanded="false">
-          <span>"Ho già comprato cose simili e non hanno funzionato."</span>
+          <span>"Ho già comprato cose simili. Non hanno funzionato."</span>
           <span class="faq-icon" aria-hidden="true">+</span>
         </button>
         <div class="faq-body" role="region">
           <div class="faq-body-inner">
-            <p>La differenza è nel metodo, non nel materiale. Un video di massaggio visto su un'app non è un percorso strutturato. La sequenza dei movimenti conta — in che ordine li fai, per quanto tempo, con quanta pressione.</p>
-            <p>Metodo Rituale Viso non è una raccolta di contenuti — è un rituale con una logica interna che ti spiega perché ogni passaggio viene prima o dopo un altro. Quando capisci il perché, lo fai meglio. Quando lo fai meglio, funziona. E c'è la garanzia: se entro 30 giorni non sei soddisfatta, ti rimborsiamo tutto — senza domande.</p>
+            <p>Perché un video sparso su un'app non è un metodo. Nell'auto-massaggio la sequenza è tutto: in che ordine, per quanti secondi, con quale pressione. Sbagli l'ordine e il drenaggio semplicemente non avviene — ed ecco perché "non ha funzionato".</p>
+            <p>Metodo Rituale Viso ti dà la logica, non solo i gesti: capisci perché ogni passaggio viene prima o dopo l'altro. E se anche così entro 30 giorni non sei soddisfatta, una riga via email e ti rimborsiamo tutto. Il rischio l'abbiamo preso noi.</p>
           </div>
         </div>
       </div>
@@ -1601,217 +1529,23 @@
 
 
 <!-- ════════════════════════════════════════════════
-     9 · TESTIMONIANZE — carousel infinito
+     9 · PRIMA COORTE (nessuna recensione inventata)
+     Nota: rimosso il doppio carosello con 16 testimonianze segnaposto —
+     mai raccolte da clienti reali. Presentarle come recensioni con nome
+     ed età sarebbe una pratica commerciale scorretta (Codice del Consumo).
+     Quando arrivano le prime recensioni vere, questo blocco va sostituito
+     con quelle (testuali, con consenso, "Recensione verificata · mese anno").
 ════════════════════════════════════════════════ -->
-<section class="section-pad" style="background: var(--bg-warm); overflow:hidden;">
-
-  <div style="text-align:center; margin-bottom:var(--sp-7);" class="reveal">
-    <span class="eyebrow">Chi l'ha già fatto</span>
-    <h2 style="margin-top:var(--sp-2);">In parole loro.</h2>
-  </div>
-
-  <!-- Track 1 — scorre a sinistra -->
-  <div class="tcarousel-wrap" aria-hidden="true">
-    <div class="tcarousel" id="tc1">
-
-      <div class="tc-card tc-card--a">
-        <div class="stars">★★★★★</div>
-        <p class="tc-quote">"Ho notato la differenza già dalla seconda mattina. Il viso era più asciutto, gli occhi meno gonfi. Non credevo fosse così immediato."</p>
-        <p class="tc-name">Alessia R. · 42 anni</p>
-      </div>
-
-      <div class="tc-card tc-card--b">
-        <div class="stars">★★★★★</div>
-        <p class="tc-quote">"Dieci minuti. Davvero dieci minuti. Il giorno dopo mi sono guardata allo specchio e ho capito cosa stavo perdendo."</p>
-        <p class="tc-name">Marta C. · 38 anni</p>
-      </div>
-
-      <div class="tc-card tc-card--c">
-        <div class="stars">★★★★★</div>
-        <p class="tc-quote">"Avevo provato tutto. Creme, massaggi, guasha. Questo è diverso perché ha una logica — capisci perché lo fai e allora lo fai davvero."</p>
-        <p class="tc-name">Francesca M. · 51 anni</p>
-      </div>
-
-      <div class="tc-card tc-card--a">
-        <div class="stars">★★★★★</div>
-        <p class="tc-quote">"L'ovale. Quello che vedo adesso è l'ovale che ricordavo di avere. Non pensavo fosse possibile senza medici."</p>
-        <p class="tc-name">Giulia B. · 46 anni</p>
-      </div>
-
-      <div class="tc-card tc-card--d">
-        <div class="stars">★★★★★</div>
-        <p class="tc-quote">"Ho 54 anni e lavoravo convinta che la cosa migliore fosse accettare. Invece no. I risultati sono reali, non mi aspettavo questo."</p>
-        <p class="tc-name">Roberta P. · 54 anni</p>
-      </div>
-
-      <div class="tc-card tc-card--b">
-        <div class="stars">★★★★★</div>
-        <p class="tc-quote">"La mattina è il momento che odiavo di più. Adesso è quello che aspetto. È assurdo ma è così."</p>
-        <p class="tc-name">Valentina S. · 39 anni</p>
-      </div>
-
-      <div class="tc-card tc-card--c">
-        <div class="stars">★★★★★</div>
-        <p class="tc-quote">"Mia sorella mi ha chiesto se avessi fatto qualcosa. Non avevo fatto niente — o meglio, avevo fatto questo."</p>
-        <p class="tc-name">Laura T. · 44 anni</p>
-      </div>
-
-      <div class="tc-card tc-card--d">
-        <div class="stars">★★★★★</div>
-        <p class="tc-quote">"Non ho parole per descrivere la sensazione di leggerezza dopo la prima sessione. Come se il viso avesse tirato un respiro."</p>
-        <p class="tc-name">Chiara N. · 48 anni</p>
-      </div>
-
+<section class="section-pad" style="background: var(--bg-warm);">
+  <div class="col">
+    <div style="text-align:center;" class="reveal">
+      <span class="eyebrow">Sei tra le prime</span>
+      <h2 style="margin-top:var(--sp-2);">E questo ha un prezzo — più basso.</h2>
+      <p style="margin-top:var(--sp-3); max-width:520px; margin-left:auto; margin-right:auto;">
+        Il metodo è nuovo. Non ti mostreremo recensioni che non abbiamo ancora: le stiamo raccogliendo da chi entra adesso, ed è per questo che il prezzo di lancio è quello che vedi. Quando la pagina si riempirà di risultati veri, il prezzo salirà. Semplice.
+      </p>
     </div>
   </div>
-
-  <!-- Track 2 — scorre a destra (velocità diversa) -->
-  <div class="tcarousel-wrap" style="margin-top:var(--sp-3);" aria-hidden="true">
-    <div class="tcarousel tcarousel--rev" id="tc2">
-
-      <div class="tc-card tc-card--d">
-        <div class="stars">★★★★★</div>
-        <p class="tc-quote">"Ero scettica. Poi ho visto le foto del prima e dopo di un'altra e ho pensato: proviamo. Non me ne sono mai pentita."</p>
-        <p class="tc-name">Sara G. · 41 anni</p>
-      </div>
-
-      <div class="tc-card tc-card--a">
-        <div class="stars">★★★★★</div>
-        <p class="tc-quote">"Il trucco mi dura meglio. Non lo avrei mai collegato, ma da quando faccio il rituale il fondotinta non si deposita sulle guance nel pomeriggio."</p>
-        <p class="tc-name">Elena F. · 37 anni</p>
-      </div>
-
-      <div class="tc-card tc-card--b">
-        <div class="stars">★★★★★</div>
-        <p class="tc-quote">"Ho smesso di guardarmi le foto con quella sensazione di fastidio. Adesso mi riconosco di nuovo."</p>
-        <p class="tc-name">Monica L. · 50 anni</p>
-      </div>
-
-      <div class="tc-card tc-card--c">
-        <div class="stars">★★★★★</div>
-        <p class="tc-quote">"Pensavo fosse per donne più giovani. Invece funziona anche a 57 anni. Anzi, direi che funziona proprio perché ho quell'età."</p>
-        <p class="tc-name">Anna D. · 57 anni</p>
-      </div>
-
-      <div class="tc-card tc-card--a">
-        <div class="stars">★★★★★</div>
-        <p class="tc-quote">"L'ho regalato a mia madre. Lei ha 62 anni e dice che è la cosa più intelligente che le abbia dato negli ultimi anni."</p>
-        <p class="tc-name">Silvia M. · 38 anni</p>
-      </div>
-
-      <div class="tc-card tc-card--d">
-        <div class="stars">★★★★★</div>
-        <p class="tc-quote">"Stavo per prenotare un filler. Ho aspettato un mese per provare prima questo. Quel filler non l'ho più prenotato."</p>
-        <p class="tc-name">Beatrice V. · 45 anni</p>
-      </div>
-
-      <div class="tc-card tc-card--b">
-        <div class="stars">★★★★★</div>
-        <p class="tc-quote">"In tre settimane ho perso quella pesantezza sotto gli occhi che portavo da anni. Pensavo fosse genetica. Non era genetica."</p>
-        <p class="tc-name">Carla A. · 53 anni</p>
-      </div>
-
-      <div class="tc-card tc-card--c">
-        <div class="stars">★★★★★</div>
-        <p class="tc-quote">"Non mi aspettavo di sentirmi meglio già dalla prima volta. Non è euforia — è una sensazione fisica concreta di svuotamento del gonfiore."</p>
-        <p class="tc-name">Paola R. · 49 anni</p>
-      </div>
-
-    </div>
-  </div>
-
-  <style>
-    .tcarousel-wrap {
-      overflow: hidden;
-      mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
-      -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
-    }
-
-    .tcarousel {
-      display: flex;
-      gap: 16px;
-      width: max-content;
-      animation: scrollLeft 42s linear infinite;
-    }
-
-    .tcarousel--rev {
-      animation: scrollRight 52s linear infinite;
-    }
-
-    @keyframes scrollLeft {
-      0%   { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
-    }
-
-    @keyframes scrollRight {
-      0%   { transform: translateX(-50%); }
-      100% { transform: translateX(0); }
-    }
-
-    .tcarousel:hover,
-    .tcarousel--rev:hover { animation-play-state: paused; }
-
-    .tc-card {
-      flex-shrink: 0;
-      width: 300px;
-      border-radius: 20px;
-      padding: 24px 24px 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .tc-card--a { background: var(--bg); border: 1px solid var(--bg-deep); }
-    .tc-card--b { background: var(--ink); }
-    .tc-card--c { background: var(--bg-warm); border: 1px solid var(--bg-deep); }
-    .tc-card--d { background: var(--accent); }
-
-    .tc-card--b .stars,
-    .tc-card--d .stars { color: #f6c89a; }
-
-    .tc-quote {
-      font-family: 'Fraunces', serif;
-      font-style: italic;
-      font-size: 0.95em;
-      line-height: 1.6;
-      margin: 0;
-      flex: 1;
-    }
-
-    .tc-card--a .tc-quote,
-    .tc-card--c .tc-quote { color: var(--ink); }
-    .tc-card--b .tc-quote { color: rgba(246,241,234,0.85); }
-    .tc-card--d .tc-quote { color: #fff; }
-
-    .tc-name {
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      margin: 0;
-    }
-
-    .tc-card--a .tc-name,
-    .tc-card--c .tc-name { color: var(--ink-muted); }
-    .tc-card--b .tc-name { color: rgba(246,241,234,0.4); }
-    .tc-card--d .tc-name { color: rgba(255,255,255,0.65); }
-
-    @media (prefers-reduced-motion: reduce) {
-      .tcarousel, .tcarousel--rev { animation: none; }
-    }
-  </style>
-
-  <!-- Duplica le card per loop infinito senza JS -->
-  <script>
-    (function () {
-      ['tc1','tc2'].forEach(function(id) {
-        var el = document.getElementById(id);
-        if (!el) return;
-        el.innerHTML += el.innerHTML;
-      });
-    })();
-  </script>
-
 </section>
 
 <hr class="hr" />
@@ -1829,7 +1563,7 @@
       <div style="display:flex; justify-content:center; margin-bottom:var(--sp-5);">
         <span style="background:rgba(201,139,107,0.18); border:1px solid rgba(201,139,107,0.35); color:var(--accent); font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase; padding:7px 18px; border-radius:20px; display:flex; align-items:center; gap:8px;">
           <svg width="7" height="7" viewBox="0 0 8 8" aria-hidden="true"><circle cx="4" cy="4" r="4" fill="var(--accent)"/></svg>
-          Prezzo di lancio · Disponibile ora
+          Prezzo di lancio · Salirà con le prime recensioni
         </span>
       </div>
 
@@ -1846,34 +1580,34 @@
       <div style="background:rgba(255,255,255,0.05); border-radius:var(--radius-sm); padding:var(--sp-3) var(--sp-4); margin-bottom:var(--sp-5);">
         <div class="ci-row">
           <span class="ci-check" aria-hidden="true">✓</span>
-          <div><p class="ci-title">PDF da 44 pagine — scaricabile subito</p><p class="ci-desc">Il percorso completo, tuo a vita. Apri dal telefono la mattina, nessun login ogni volta</p></div>
+          <div><p class="ci-title">Il PDF completo (44 pagine) — tuo per sempre</p><p class="ci-desc">Dal telefono, senza login</p></div>
         </div>
         <div class="ci-row">
           <span class="ci-check" aria-hidden="true">✓</span>
-          <div><p class="ci-title">6 aree con diagrammi e movimenti numerati</p><p class="ci-desc">Collo, mandibola, guance, contorno occhi, fronte, bocca — con pressione, ripetizioni ed errori da evitare</p></div>
+          <div><p class="ci-title">6 aree del viso con diagrammi e movimenti numerati</p><p class="ci-desc">Direzione, pressione, secondi, errori da evitare</p></div>
         </div>
         <div class="ci-row">
           <span class="ci-check" aria-hidden="true">✓</span>
-          <div><p class="ci-title">Rituale da 10 min + express da 60 secondi</p><p class="ci-desc">Il rituale completo minuto per minuto. Più la versione rapida per i giorni corti</p></div>
+          <div><p class="ci-title">Il rituale da 10 minuti, minuto per minuto</p><p class="ci-desc">+ la versione da 60 secondi per i giorni corti</p></div>
         </div>
         <div class="ci-row">
           <span class="ci-check" aria-hidden="true">✓</span>
-          <div><p class="ci-title">Programma 4 settimane + diario fotografico</p><p class="ci-desc">Progressione già pronta. Spazio per le foto e l'auto-valutazione settimana per settimana</p></div>
+          <div><p class="ci-title">Programma 4 settimane + diario fotografico</p><p class="ci-desc">Perché la memoria mente, le foto no</p></div>
         </div>
         <div class="ci-row" style="border-bottom:none; padding-bottom:0;">
           <span class="ci-check ci-check--bonus" aria-hidden="true">+</span>
-          <div><p class="ci-title" style="color:var(--accent);">Bonus: Guida ai prodotti</p><p class="ci-desc">Quali olii usare come vettore — lista corta, tutto reperibile in farmacia</p></div>
+          <div><p class="ci-title" style="color:var(--accent);">Bonus: la guida agli olii</p><p class="ci-desc">La lista corta di cosa usare come vettore, tutto reperibile in farmacia</p></div>
         </div>
       </div>
 
       <!-- Prezzo -->
       <div style="text-align:center; margin-bottom:var(--sp-2);">
-        <div style="display:flex; align-items:center; justify-content:center; gap:14px; margin-bottom:6px;">
-          <p style="font-size:14px; color:rgba(246,241,234,0.35); text-decoration:line-through; margin:0;">39 €</p>
-          <span style="background:var(--accent); color:#fff; font-size:11px; font-weight:700; padding:3px 10px; border-radius:20px; letter-spacing:0.5px;">Prezzo lancio</span>
-        </div>
+        <p style="font-size:13px; color:rgba(246,241,234,0.45); max-width:340px; margin:0 auto 14px; line-height:1.6;">
+          Una seduta di filler: 300–500 €, da ripetere ogni 4-6 mesi.<br/>Una crema "miracolosa": 90 €, da ricomprare per sempre.
+        </p>
         <div class="price-display" aria-label="Prezzo %%PRICE_EUR%% euro">%%PRICE_EUR%% €</div>
-        <p style="font-size:13px; color:rgba(246,241,234,0.35); margin-top:8px;">Pagamento unico · Nessun abbonamento · PDF scaricabile subito</p>
+        <p style="font-size:13px; color:rgba(246,241,234,0.55); margin-top:8px;">Una volta. Tuo per sempre.</p>
+        <p style="font-size:12px; color:rgba(246,241,234,0.3); margin-top:6px;">Pagamento unico · Nessun abbonamento · Scarichi subito</p>
       </div>
 
       <!-- Separatore -->
@@ -1883,7 +1617,7 @@
       <button id="checkoutBtn" class="btn btn-accent btn-full btn-lg" style="font-size:16px; font-weight:800; letter-spacing:0.2px; cursor:pointer;">
         <span id="checkoutBtnText" style="display:flex; align-items:center; gap:10px;">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-          Inizia il percorso · %%PRICE_EUR%% € →
+          Inizia il percorso — %%PRICE_EUR%% € →
         </span>
         <span id="checkoutBtnLoader" style="display:none; align-items:center; gap:8px;">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true" style="animation:spin 0.8s linear infinite;"><path d="M21 12a9 9 0 11-18 0"/></svg>
@@ -1900,7 +1634,7 @@
         </div>
         <div style="display:flex; align-items:center; gap:6px; font-size:11px; color:rgba(246,241,234,0.28);">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
-          Soddisfatta o rimborsata 30 gg
+          Garanzia 30 giorni
         </div>
         <div style="display:flex; align-items:center; gap:6px; font-size:11px; color:rgba(246,241,234,0.28);">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
@@ -1932,14 +1666,17 @@
 
       <span class="eyebrow" style="margin-bottom:var(--sp-2);">La garanzia</span>
       <h2 style="margin-top:var(--sp-2); margin-bottom:var(--sp-3); font-size:clamp(1.5rem, 4vw, 2.2rem);">
-        Soddisfatta o rimborsata<br/>entro 30 giorni
+        30 giorni. Soddisfatta o rimborsata.<br/>Punto.
       </h2>
 
       <p style="max-width:480px; margin:0 auto var(--sp-3); font-size:15px; line-height:1.75;">
-        Prova il percorso. Fallo davvero — segui i video, applica il rituale, guarda cosa succede al tuo viso il mattino seguente. Se entro 30 giorni non sei soddisfatta, scrivi una riga e ti rimborsiamo tutto. Senza domande, senza moduli, senza aspettare settimane.
+        Scarica la guida. Falla davvero: apri il PDF, segui il rituale, guarda il tuo viso domattina. Hai 30 giorni interi per decidere.
+      </p>
+      <p style="max-width:480px; margin:0 auto var(--sp-3); font-size:15px; line-height:1.75;">
+        Se non sei soddisfatta — per qualsiasi motivo, anche solo "non fa per me" — scrivi una riga via email e ti rimborsiamo tutto. Senza domande, senza moduli, senza farti aspettare.
       </p>
 
-      <p style="font-size:15px; font-weight:700; color:var(--accent);">Il rischio è nostro, non tuo.</p>
+      <p style="font-size:15px; font-weight:700; color:var(--accent);">Il rischio è nostro. A te resta solo domattina allo specchio.</p>
 
     </div>
   </div>
@@ -1962,16 +1699,20 @@
     </h2>
 
     <p class="reveal reveal-delay-2" style="max-width:480px; margin:0 auto var(--sp-5); font-size:1.05em; line-height:1.75;">
-      Non ti stiamo chiedendo di cambiare faccia. Ti stiamo chiedendo di ridarle il movimento che si è fermato — e di guardare cosa succede il mattino dopo.
+      Non ti stiamo chiedendo di cambiare faccia. Ti stiamo chiedendo di ridare al tuo viso il movimento che si è fermato — e di guardare cosa succede domattina.
+    </p>
+
+    <p class="reveal reveal-delay-2" style="max-width:480px; margin:0 auto var(--sp-5); font-size:1.05em; line-height:1.75;">
+      Puoi chiudere questa pagina e ripensarci alla prossima foto in cui non ti riconosci. Oppure puoi fare la prima sessione stasera, e domattina saperlo.
     </p>
 
     <p class="f-serif reveal reveal-delay-2" style="font-style:italic; font-size:clamp(1.1rem, 2.5vw, 1.4rem); max-width:440px; margin:0 auto var(--sp-6); line-height:1.6; color:var(--ink);">
-      Dieci minuti non cambiano chi sei. Ti fanno sembrare di fuori come già ti senti dentro.
+      Dieci minuti non cambiano chi sei. Fanno vedere fuori come ti senti dentro.
     </p>
 
     <div class="reveal reveal-delay-3">
-      <a href="#offerta" data-modal="pay" class="btn btn-accent btn-lg">Inizia il percorso →</a>
-      <p style="font-size:12px; color:var(--ink-muted); margin-top:var(--sp-2);">Soddisfatta o rimborsata entro 30 giorni</p>
+      <a href="#offerta" data-modal="pay" class="btn btn-accent btn-lg">Inizia il percorso — %%PRICE_EUR%% € →</a>
+      <p style="font-size:12px; color:var(--ink-muted); margin-top:var(--sp-2);">Garanzia 30 giorni · Accesso immediato</p>
     </div>
 
     <!-- Firma fondatrice -->
@@ -2004,7 +1745,7 @@
     </nav>
 
     <p style="font-size:12px; color:var(--ink-muted); line-height:1.7; max-width:540px; margin:0 auto var(--sp-3);">
-      I contenuti di questa pagina hanno finalità informative e non costituiscono consulenza medica. I risultati possono variare da persona a persona e dipendono dalla costanza del rituale. Non si promettono risultati medici o permanenti.
+      I contenuti di questa pagina hanno finalità informative e non costituiscono consulenza medica. Il metodo agisce su gonfiore, ristagno linfatico e tensione muscolare; non modifica la struttura ossea, non tratta patologie e non sostituisce il parere di un medico. I risultati variano da persona a persona e dipendono dalla costanza della pratica.
     </p>
 
     <p style="font-size:11px; color:#5a4f49;">
@@ -2412,81 +2153,6 @@
   }, 1200);
 })();
 
-/* ── Social proof toast ── */
-(function () {
-  var toast     = document.getElementById('socialToast');
-  var nameEl    = document.getElementById('toastName');
-  var timeEl    = document.getElementById('toastTime');
-  var closeBtn  = document.getElementById('toastClose');
-  var modal     = document.getElementById('payModal');
-  if (!toast) return;
-
-  var entries = [
-    { name: 'Marta B.',      time: 'poco fa' },
-    { name: 'Sofia R.',      time: '2 minuti fa' },
-    { name: 'Giulia M.',     time: '4 minuti fa' },
-    { name: 'Elena C.',      time: 'poco fa' },
-    { name: 'Laura P.',      time: '6 minuti fa' },
-    { name: 'Chiara F.',     time: '3 minuti fa' },
-    { name: 'Valentina S.',  time: '8 minuti fa' },
-    { name: 'Alessia T.',    time: 'poco fa' },
-    { name: 'Francesca D.',  time: '5 minuti fa' },
-    { name: 'Serena L.',     time: '2 minuti fa' },
-    { name: 'Monica G.',     time: '7 minuti fa' },
-    { name: 'Paola N.',      time: '3 minuti fa' },
-    { name: 'Beatrice V.',   time: 'poco fa' },
-    { name: 'Irene M.',      time: '4 minuti fa' },
-    { name: 'Camilla R.',    time: '9 minuti fa' },
-    { name: 'Giorgia T.',    time: '1 minuto fa' },
-    { name: 'Roberta C.',    time: '5 minuti fa' },
-    { name: 'Martina L.',    time: 'poco fa' },
-    { name: 'Elisa P.',      time: '6 minuti fa' },
-    { name: 'Sara D.',       time: '3 minuti fa' },
-  ];
-
-  var idx      = Math.floor(Math.random() * entries.length);
-  var hideTimer = null;
-  var nextTimer = null;
-
-  function isModalOpen() {
-    return modal && modal.classList.contains('open');
-  }
-
-  function showToast() {
-    if (isModalOpen()) { scheduleNext(); return; }
-
-    var entry = entries[idx % entries.length];
-    idx++;
-    nameEl.textContent = entry.name + ' ha acquistato';
-    timeEl.textContent = entry.time;
-
-    toast.setAttribute('aria-hidden', 'false');
-    toast.classList.add('show');
-
-    clearTimeout(hideTimer);
-    hideTimer = setTimeout(hideToast, 4200);
-  }
-
-  function hideToast() {
-    toast.classList.remove('show');
-    toast.setAttribute('aria-hidden', 'true');
-    scheduleNext();
-  }
-
-  function scheduleNext() {
-    clearTimeout(nextTimer);
-    var delay = 5000 + Math.random() * 3000; /* 5–8 secondi */
-    nextTimer = setTimeout(showToast, delay);
-  }
-
-  closeBtn.addEventListener('click', function () {
-    clearTimeout(hideTimer);
-    hideToast();
-  });
-
-  /* Prima apparizione dopo 6 secondi */
-  setTimeout(showToast, 6000);
-})();
 </script>
 
 <script>
