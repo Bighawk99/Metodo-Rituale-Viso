@@ -228,7 +228,11 @@ app.post('/api/track', trackLimiter, async function (req, res) {
 });
 
 /* ─── GET /api/admin/stats ───────────────────────────────────────────────────
-   Statistiche aggregate protette da ADMIN_PASSWORD.                           */
+   Statistiche aggregate protette da ADMIN_PASSWORD.
+   Query params opzionali `from` / `to` (ISO 8601): filtrano visite, checkout,
+   vendite/fatturato e permanenza media sul periodo selezionato. Default:
+   ultime 24 ore, ma il pannello admin invia sempre un intervallo esplicito
+   (default "oggi" lato client).                                              */
 app.get('/api/admin/stats', async function (req, res) {
   const pwd = process.env.ADMIN_PASSWORD;
   if (pwd && req.query.password !== pwd) {
@@ -236,21 +240,31 @@ app.get('/api/admin/stats', async function (req, res) {
   }
   if (!supabase) return res.status(503).json({ error: 'Supabase non configurato' });
 
+  const now  = new Date();
+  const to   = req.query.to   ? new Date(req.query.to)   : now;
+  const from = req.query.from ? new Date(req.query.from) : new Date(now.getTime() - 86400000);
+  if (isNaN(from.getTime()) || isNaN(to.getTime()) || from > to) {
+    return res.status(400).json({ error: 'Intervallo date non valido' });
+  }
+  const fromIso = from.toISOString();
+  const toIso   = to.toISOString();
+
   try {
     const [
-      { count: totalViews },
-      { count: todayViews },
+      { count: periodViews },
       { count: checkouts },
       { data: orders },
       { data: timeEvents },
       { data: dailyRaw },
     ] = await Promise.all([
-      supabase.from('events').select('*', { count: 'exact', head: true }).eq('event_name', 'PageView'),
       supabase.from('events').select('*', { count: 'exact', head: true }).eq('event_name', 'PageView')
-        .gte('created_at', new Date(Date.now() - 86400000).toISOString()),
-      supabase.from('events').select('*', { count: 'exact', head: true }).eq('event_name', 'InitiateCheckout'),
-      supabase.from('orders').select('amount, status, customer_email, paid_at, config').eq('status', 'succeeded').order('paid_at', { ascending: false }).limit(50),
-      supabase.from('events').select('payload').eq('event_name', 'TimeOnPage').limit(500),
+        .gte('created_at', fromIso).lt('created_at', toIso),
+      supabase.from('events').select('*', { count: 'exact', head: true }).eq('event_name', 'InitiateCheckout')
+        .gte('created_at', fromIso).lt('created_at', toIso),
+      supabase.from('orders').select('amount, status, customer_email, paid_at, config').eq('status', 'succeeded')
+        .gte('paid_at', fromIso).lt('paid_at', toIso).order('paid_at', { ascending: false }).limit(500),
+      supabase.from('events').select('payload').eq('event_name', 'TimeOnPage')
+        .gte('created_at', fromIso).lt('created_at', toIso).limit(500),
       supabase.from('events').select('created_at').eq('event_name', 'PageView')
         .gte('created_at', new Date(Date.now() - 7 * 86400000).toISOString()),
     ]);
@@ -261,7 +275,7 @@ app.get('/api/admin/stats', async function (req, res) {
       ? Math.round(timeEvents.reduce(function (s, e) { return s + (e.payload?.seconds || 0); }, 0) / timeEvents.length)
       : 0;
 
-    /* Visite per giorno (ultimi 7) */
+    /* Visite per giorno (ultimi 7, indipendente dal filtro — trend di contesto) */
     const dayMap = {};
     for (var i = 6; i >= 0; i--) {
       var d = new Date(Date.now() - i * 86400000);
@@ -273,11 +287,11 @@ app.get('/api/admin/stats', async function (req, res) {
     });
 
     res.json({
-      views:     { total: totalViews || 0, today: todayViews || 0 },
+      views:     { total: periodViews || 0 },
       checkouts: checkouts || 0,
       sales:     { count: completedOrders.length, revenue: revenue },
       avgTime:   avgSecs,
-      convCheckout: totalViews ? ((checkouts || 0) / totalViews * 100).toFixed(1) : '0.0',
+      convCheckout: periodViews ? ((checkouts || 0) / periodViews * 100).toFixed(1) : '0.0',
       convSale:     (checkouts || 0) ? (completedOrders.length / (checkouts || 1) * 100).toFixed(1) : '0.0',
       daily:     dayMap,
       orders:    completedOrders.slice(0, 20),

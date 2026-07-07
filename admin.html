@@ -38,12 +38,26 @@
     .dash-inner{max-width:1100px;margin:0 auto;padding:32px 24px}
 
     /* date range */
-    .toolbar{display:flex;align-items:center;gap:12px;margin-bottom:28px;flex-wrap:wrap}
+    .toolbar{display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap}
     .toolbar h2{font-family:'Fraunces',serif;font-size:1.3rem;font-weight:600;flex:1}
-    .range-btn{font-size:12px;font-weight:600;padding:6px 14px;border-radius:20px;border:1.5px solid var(--bg-deep);background:transparent;cursor:pointer;color:var(--ink-soft);transition:all 0.15s}
-    .range-btn.active,.range-btn:hover{background:var(--ink);color:#fff;border-color:var(--ink)}
     .logout-btn{font-size:12px;color:var(--ink-muted);background:none;border:none;cursor:pointer;padding:6px 10px;border-radius:8px}
     .logout-btn:hover{color:var(--red)}
+
+    /* filter bar */
+    .filter-bar{display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap;background:var(--card);border-radius:var(--radius);padding:14px 16px;box-shadow:0 2px 8px rgba(44,38,34,0.05)}
+    .filter-presets{display:flex;gap:8px;flex-wrap:wrap}
+    .range-btn{font-size:12px;font-weight:600;padding:7px 14px;border-radius:20px;border:1.5px solid var(--bg-deep);background:transparent;cursor:pointer;color:var(--ink-soft);transition:all 0.15s;white-space:nowrap}
+    .range-btn.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+    .range-btn:hover{border-color:var(--ink)}
+    .filter-custom{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+    .filter-custom input[type="date"]{border:1.5px solid var(--bg-deep);border-radius:8px;padding:6px 8px;font-size:12px;font-family:'Inter',sans-serif;color:var(--ink);background:var(--bg)}
+    .filter-custom span{color:var(--ink-muted);font-size:12px}
+    .apply-btn{font-size:12px;font-weight:600;padding:6px 12px;border-radius:8px;border:none;background:var(--ink);color:#fff;cursor:pointer}
+    .apply-btn:hover{background:#3d3330}
+    .filter-spacer{flex:1}
+    .period-label{font-size:12px;color:var(--ink-muted);font-weight:600}
+    .reload-btn{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;padding:8px 16px;border-radius:20px;border:1.5px solid var(--accent);background:transparent;color:var(--accent);cursor:pointer;transition:all 0.15s;white-space:nowrap}
+    .reload-btn:hover{background:var(--accent);color:#fff}
 
     /* ── Cards ── */
     .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:28px}
@@ -86,6 +100,9 @@
       .cards{grid-template-columns:1fr 1fr}
       .dash-inner{padding:20px 16px}
       header{padding:14px 16px}
+      .filter-bar{padding:12px}
+      .filter-spacer{display:none}
+      .reload-btn{width:100%;justify-content:center}
     }
   </style>
 </head>
@@ -120,12 +137,32 @@
       <button class="logout-btn" id="logoutBtn">Esci</button>
     </div>
 
+    <!-- Filtro periodo -->
+    <div class="filter-bar">
+      <div class="filter-presets" id="filterPresets">
+        <button class="range-btn" data-range="today">Oggi</button>
+        <button class="range-btn" data-range="yesterday">Ieri</button>
+        <button class="range-btn" data-range="7d">Ultimi 7 giorni</button>
+        <button class="range-btn" data-range="30d">Ultimi 30 giorni</button>
+        <button class="range-btn" data-range="custom">Personalizzato</button>
+      </div>
+      <div class="filter-custom" id="filterCustom" style="display:none">
+        <input type="date" id="fromDate"/>
+        <span>→</span>
+        <input type="date" id="toDate"/>
+        <button class="apply-btn" id="applyCustom">Applica</button>
+      </div>
+      <div class="filter-spacer"></div>
+      <div class="period-label" id="periodLabel">Oggi</div>
+      <button class="reload-btn" id="reloadBtn" title="Ricarica la pagina e aggiorna i dati">⟳ Aggiorna</button>
+    </div>
+
     <!-- KPI Cards -->
     <div class="cards" id="cards">
-      <div class="card"><div class="label">Visite totali</div><div class="value" id="kViews">—</div><div class="sub" id="kViewsSub">—</div></div>
+      <div class="card"><div class="label">Visite</div><div class="value" id="kViews">—</div><div class="sub" id="kViewsSub">—</div></div>
       <div class="card"><div class="label">Checkout aperti</div><div class="value" id="kCheckouts">—</div><div class="sub" id="kConvC">conv. da visite</div></div>
       <div class="card green"><div class="label">Pagamenti</div><div class="value" id="kSales">—</div><div class="sub" id="kConvS">conv. da checkout</div></div>
-      <div class="card accent"><div class="label">Incasso</div><div class="value" id="kRevenue">—</div><div class="sub">IVA esclusa</div></div>
+      <div class="card accent"><div class="label">Fatturato periodo</div><div class="value" id="kRevenue">—</div><div class="sub">IVA esclusa</div></div>
       <div class="card"><div class="label">Permanenza media</div><div class="value" id="kTime">—</div><div class="sub">sulla landing</div></div>
     </div>
 
@@ -153,6 +190,18 @@
   var loginBtn     = document.getElementById('loginBtn');
   var loginError   = document.getElementById('loginError');
 
+  var filterCustom  = document.getElementById('filterCustom');
+  var fromDateInput = document.getElementById('fromDate');
+  var toDateInput   = document.getElementById('toDate');
+  var periodLabelEl = document.getElementById('periodLabel');
+
+  /* Periodo selezionato: persistito in sessionStorage così il pulsante
+     "Aggiorna" (reload pagina) mantiene il filtro scelto invece di
+     resettarlo sempre a "oggi". */
+  var currentRange = sessionStorage.getItem('admin_range') || 'today';
+  var customFrom   = sessionStorage.getItem('admin_from')  || '';
+  var customTo     = sessionStorage.getItem('admin_to')    || '';
+
   function fmt(n) { return (n || 0).toFixed(2).replace('.', ',') + ' €'; }
   function fmtTime(s) {
     if (!s) return '—';
@@ -163,12 +212,68 @@
     var d = new Date(iso);
     return ['Dom','Lun','Mar','Mer','Gio','Ven','Sab'][d.getDay()];
   }
+  function fmtDateIt(d) {
+    return String(d.getDate()).padStart(2, '0') + '/' + String(d.getMonth() + 1).padStart(2, '0') + '/' + d.getFullYear();
+  }
+  function toDateInputValue(d) {
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  }
+
+  /* Calcola { from, to, label } per la chiave di periodo selezionata.
+     "to" è sempre esclusivo (il giorno finale è incluso interamente). */
+  function computeRange(key) {
+    var now = new Date();
+    var startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0);
+
+    if (key === 'yesterday') {
+      var start = new Date(startOfToday); start.setDate(start.getDate() - 1);
+      return { from: start, to: startOfToday, label: 'Ieri (' + fmtDateIt(start) + ')' };
+    }
+    if (key === '7d') {
+      var start = new Date(startOfToday); start.setDate(start.getDate() - 6);
+      return { from: start, to: now, label: 'Ultimi 7 giorni' };
+    }
+    if (key === '30d') {
+      var start = new Date(startOfToday); start.setDate(start.getDate() - 29);
+      return { from: start, to: now, label: 'Ultimi 30 giorni' };
+    }
+    if (key === 'custom') {
+      var fromStr = customFrom || toDateInputValue(startOfToday);
+      var toStr   = customTo   || toDateInputValue(startOfToday);
+      var start   = new Date(fromStr + 'T00:00:00');
+      var endExclusive = new Date(toStr + 'T00:00:00');
+      endExclusive.setDate(endExclusive.getDate() + 1);
+      var label = (fromStr === toStr) ? fmtDateIt(start) : (fmtDateIt(start) + ' – ' + fmtDateIt(new Date(endExclusive.getTime() - 86400000)));
+      return { from: start, to: endExclusive, label: label };
+    }
+    /* default: today */
+    return { from: startOfToday, to: now, label: 'Oggi' };
+  }
+
+  function updatePresetButtons() {
+    document.querySelectorAll('.range-btn').forEach(function (btn) {
+      btn.classList.toggle('active', btn.dataset.range === currentRange);
+    });
+    filterCustom.style.display = (currentRange === 'custom') ? 'flex' : 'none';
+  }
+
+  /* Precompila le date custom (da sessionStorage o da oggi) */
+  fromDateInput.value = customFrom || toDateInputValue(new Date());
+  toDateInput.value   = customTo   || toDateInputValue(new Date());
 
   function loadStats(password) {
     loginScreen.style.display  = 'none';
     loadingScreen.style.display = 'flex';
 
-    fetch('/api/admin/stats?password=' + encodeURIComponent(password))
+    var range = computeRange(currentRange);
+    updatePresetButtons();
+    periodLabelEl.textContent = range.label;
+
+    var url = '/api/admin/stats?password=' + encodeURIComponent(password)
+      + '&from=' + encodeURIComponent(range.from.toISOString())
+      + '&to='   + encodeURIComponent(range.to.toISOString());
+
+    fetch(url)
       .then(function (r) {
         if (r.status === 401) { loadingScreen.style.display='none'; loginScreen.style.display='flex'; loginError.style.display='block'; sessionStorage.removeItem('admin_pwd'); return null; }
         return r.json();
@@ -180,7 +285,7 @@
 
         /* KPI */
         document.getElementById('kViews').textContent    = (d.views.total || 0).toLocaleString('it');
-        document.getElementById('kViewsSub').textContent = 'oggi: ' + (d.views.today || 0);
+        document.getElementById('kViewsSub').textContent = range.label;
         document.getElementById('kCheckouts').textContent= (d.checkouts || 0).toLocaleString('it');
         document.getElementById('kConvC').textContent    = d.convCheckout + '% conv. da visite';
         document.getElementById('kSales').textContent    = (d.sales.count || 0).toLocaleString('it');
@@ -247,6 +352,32 @@
     dashboard.style.display = 'none';
     loginScreen.style.display = 'flex';
     pwdInput.value = '';
+  });
+
+  /* Filtro periodo: click su un preset */
+  document.getElementById('filterPresets').addEventListener('click', function (e) {
+    var btn = e.target.closest('.range-btn');
+    if (!btn) return;
+    currentRange = btn.dataset.range;
+    sessionStorage.setItem('admin_range', currentRange);
+    updatePresetButtons();
+    if (currentRange === 'custom') return; /* aspetta "Applica" */
+    if (pwd) loadStats(pwd);
+  });
+
+  /* Filtro periodo: applica intervallo personalizzato */
+  document.getElementById('applyCustom').addEventListener('click', function () {
+    if (!fromDateInput.value || !toDateInput.value) return;
+    customFrom = fromDateInput.value;
+    customTo   = toDateInput.value;
+    sessionStorage.setItem('admin_from', customFrom);
+    sessionStorage.setItem('admin_to', customTo);
+    if (pwd) loadStats(pwd);
+  });
+
+  /* Ricarica la pagina per aggiornare i dati (mantiene login e periodo selezionato) */
+  document.getElementById('reloadBtn').addEventListener('click', function () {
+    location.reload();
   });
 })();
 </script>
