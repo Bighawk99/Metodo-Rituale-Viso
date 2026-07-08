@@ -227,6 +227,44 @@ app.post('/api/track', trackLimiter, async function (req, res) {
   res.json({ ok: true });
 });
 
+/* ─── Meta Marketing API: spesa Ads ───────────────────────────────────────────
+   Richiede META_ADS_TOKEN (system user, permesso ads_read) e
+   META_AD_ACCOUNT_ID (es. act_1234567890) nelle env var. Se assenti o in
+   errore ritorna null — la dashboard mostra "N/D" senza bloccarsi.
+   L'API Meta ragiona per giorni interi nel fuso dell'account pubblicitario:
+   dateFrom/dateTo sono le date di calendario (YYYY-MM-DD) del periodo,
+   già calcolate lato client nel fuso dell'utente.                            */
+async function getMetaAdSpend(dateFrom, dateTo) {
+  const token   = process.env.META_ADS_TOKEN;
+  const account = process.env.META_AD_ACCOUNT_ID;
+  if (!token || !account || !dateFrom || !dateTo) return null;
+
+  try {
+    const timeRange = encodeURIComponent(JSON.stringify({ since: dateFrom, until: dateTo }));
+    const url = `https://graph.facebook.com/v21.0/${account}/insights?fields=spend&time_range=${timeRange}&access_token=${token}`;
+    const response = await fetch(url);
+    const result   = await response.json();
+    if (result.error) {
+      console.error('[Meta Ads]', result.error.message);
+      return null;
+    }
+    const spend = result.data && result.data[0] ? parseFloat(result.data[0].spend) : 0;
+    return isNaN(spend) ? 0 : spend;
+  } catch (e) {
+    console.error('[Meta Ads]', e.message);
+    return null;
+  }
+}
+
+/* Percentuale num/den: null se il denominatore è 0 ma il numeratore no
+   (rapporto non calcolabile, es. vendite senza checkout tracciati — non è 0%,
+   è un dato mancante) — evita di mostrare "0.0%" quando in realtà il tasso
+   di conversione non è definito. */
+function pct(num, den) {
+  if (den > 0) return (num / den * 100).toFixed(1);
+  return num > 0 ? null : '0.0';
+}
+
 /* ─── GET /api/admin/stats ───────────────────────────────────────────────────
    Statistiche aggregate protette da ADMIN_PASSWORD.
    Query params opzionali `from` / `to` (ISO 8601): filtrano visite, checkout,
@@ -246,8 +284,10 @@ app.get('/api/admin/stats', async function (req, res) {
   if (isNaN(from.getTime()) || isNaN(to.getTime()) || from > to) {
     return res.status(400).json({ error: 'Intervallo date non valido' });
   }
-  const fromIso = from.toISOString();
-  const toIso   = to.toISOString();
+  const fromIso   = from.toISOString();
+  const toIso     = to.toISOString();
+  const dateFrom  = req.query.dateFrom || fromIso.slice(0, 10);
+  const dateTo    = req.query.dateTo   || toIso.slice(0, 10);
 
   try {
     const [
@@ -256,6 +296,7 @@ app.get('/api/admin/stats', async function (req, res) {
       { data: orders },
       { data: timeEvents },
       { data: dailyRaw },
+      adSpend,
     ] = await Promise.all([
       supabase.from('events').select('*', { count: 'exact', head: true }).eq('event_name', 'PageView')
         .gte('created_at', fromIso).lt('created_at', toIso),
@@ -267,6 +308,7 @@ app.get('/api/admin/stats', async function (req, res) {
         .gte('created_at', fromIso).lt('created_at', toIso).limit(500),
       supabase.from('events').select('created_at').eq('event_name', 'PageView')
         .gte('created_at', new Date(Date.now() - 7 * 86400000).toISOString()),
+      getMetaAdSpend(dateFrom, dateTo),
     ]);
 
     const completedOrders = orders || [];
@@ -291,10 +333,11 @@ app.get('/api/admin/stats', async function (req, res) {
       checkouts: checkouts || 0,
       sales:     { count: completedOrders.length, revenue: revenue },
       avgTime:   avgSecs,
-      convCheckout: periodViews ? ((checkouts || 0) / periodViews * 100).toFixed(1) : '0.0',
-      convSale:     (checkouts || 0) ? (completedOrders.length / (checkouts || 1) * 100).toFixed(1) : '0.0',
+      convCheckout: pct(checkouts || 0, periodViews || 0),
+      convSale:     pct(completedOrders.length, checkouts || 0),
       daily:     dayMap,
       orders:    completedOrders.slice(0, 20),
+      adSpend:   adSpend, /* null se Meta non configurato o in errore */
     });
   } catch (err) {
     console.error('[Admin stats]', err.message);

@@ -67,6 +67,11 @@
     .card .sub{font-size:12px;color:var(--ink-muted);margin-top:4px}
     .card.accent .value{color:var(--accent)}
     .card.green .value{color:var(--green)}
+    .card.warn .value{color:var(--red)}
+    .card.profit{border:1.5px solid rgba(42,122,85,0.3)}
+    .card.profit .value{color:var(--green)}
+    .card.profit.negative{border-color:rgba(179,74,53,0.35)}
+    .card.profit.negative .value{color:var(--red)}
 
     /* ── Chart ── */
     .chart-box{background:var(--card);border-radius:var(--radius);padding:24px;margin-bottom:28px;box-shadow:0 2px 8px rgba(44,38,34,0.05)}
@@ -163,6 +168,8 @@
       <div class="card"><div class="label">Checkout aperti</div><div class="value" id="kCheckouts">—</div><div class="sub" id="kConvC">conv. da visite</div></div>
       <div class="card green"><div class="label">Pagamenti</div><div class="value" id="kSales">—</div><div class="sub" id="kConvS">conv. da checkout</div></div>
       <div class="card accent"><div class="label">Fatturato periodo</div><div class="value" id="kRevenue">—</div><div class="sub">IVA esclusa</div></div>
+      <div class="card warn"><div class="label">Spesa Ads</div><div class="value" id="kAdSpend">—</div><div class="sub" id="kAdSpendSub">—</div></div>
+      <div class="card profit" id="cardProfit"><div class="label">Utile</div><div class="value" id="kProfit">—</div><div class="sub">fatturato − spesa Ads</div></div>
       <div class="card"><div class="label">Permanenza media</div><div class="value" id="kTime">—</div><div class="sub">sulla landing</div></div>
     </div>
 
@@ -208,6 +215,7 @@
     if (s < 60) return s + 's';
     return Math.floor(s / 60) + 'm ' + (s % 60) + 's';
   }
+  function fmtPct(v) { return (v === null || v === undefined) ? '—' : v + '%'; }
   function fmtDay(iso) {
     var d = new Date(iso);
     return ['Dom','Lun','Mar','Mer','Gio','Ven','Sab'][d.getDay()];
@@ -221,7 +229,7 @@
 
   /* Calcola { from, to, label } per la chiave di periodo selezionata.
      "to" è sempre esclusivo (il giorno finale è incluso interamente). */
-  function computeRange(key) {
+  function computeRangeRaw(key) {
     var now = new Date();
     var startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0);
 
@@ -250,6 +258,16 @@
     return { from: startOfToday, to: now, label: 'Oggi' };
   }
 
+  /* Come sopra, ma aggiunge dateFrom/dateTo (YYYY-MM-DD, calendario locale)
+     — servono alla Meta Marketing API, che ragiona per giorni interi e non
+     per timestamp esatti. */
+  function computeRange(key) {
+    var range = computeRangeRaw(key);
+    range.dateFrom = toDateInputValue(range.from);
+    range.dateTo   = toDateInputValue(new Date(range.to.getTime() - 1));
+    return range;
+  }
+
   function updatePresetButtons() {
     document.querySelectorAll('.range-btn').forEach(function (btn) {
       btn.classList.toggle('active', btn.dataset.range === currentRange);
@@ -270,8 +288,10 @@
     periodLabelEl.textContent = range.label;
 
     var url = '/api/admin/stats?password=' + encodeURIComponent(password)
-      + '&from=' + encodeURIComponent(range.from.toISOString())
-      + '&to='   + encodeURIComponent(range.to.toISOString());
+      + '&from='     + encodeURIComponent(range.from.toISOString())
+      + '&to='       + encodeURIComponent(range.to.toISOString())
+      + '&dateFrom=' + encodeURIComponent(range.dateFrom)
+      + '&dateTo='   + encodeURIComponent(range.dateTo);
 
     fetch(url)
       .then(function (r) {
@@ -287,11 +307,26 @@
         document.getElementById('kViews').textContent    = (d.views.total || 0).toLocaleString('it');
         document.getElementById('kViewsSub').textContent = range.label;
         document.getElementById('kCheckouts').textContent= (d.checkouts || 0).toLocaleString('it');
-        document.getElementById('kConvC').textContent    = d.convCheckout + '% conv. da visite';
+        document.getElementById('kConvC').textContent    = fmtPct(d.convCheckout) + ' conv. da visite';
         document.getElementById('kSales').textContent    = (d.sales.count || 0).toLocaleString('it');
-        document.getElementById('kConvS').textContent    = d.convSale + '% conv. da checkout';
+        document.getElementById('kConvS').textContent    = fmtPct(d.convSale) + ' conv. da checkout';
         document.getElementById('kRevenue').textContent  = fmt(d.sales.revenue);
         document.getElementById('kTime').textContent     = fmtTime(d.avgTime);
+
+        /* Spesa Ads (Meta) + Utile */
+        var profitCard = document.getElementById('cardProfit');
+        if (d.adSpend === null || d.adSpend === undefined) {
+          document.getElementById('kAdSpend').textContent    = 'N/D';
+          document.getElementById('kAdSpendSub').textContent = 'Meta Ads non configurato';
+          document.getElementById('kProfit').textContent     = 'N/D';
+          profitCard.classList.remove('negative');
+        } else {
+          document.getElementById('kAdSpend').textContent    = fmt(d.adSpend);
+          document.getElementById('kAdSpendSub').textContent = 'Meta Ads · ' + range.label;
+          var profit = (d.sales.revenue || 0) - d.adSpend;
+          document.getElementById('kProfit').textContent = fmt(profit);
+          profitCard.classList.toggle('negative', profit < 0);
+        }
 
         /* Chart */
         var chart = document.getElementById('chart');
